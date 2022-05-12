@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1092027347375",
+    "project_id": "das-university",
+    "storage_bucket": "das-university.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092027347375:android:05d977e141b053130bff5a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092027347375-s9367424ieo632g5fhct6hdu6uj1toum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_application_3",
+            "certificate_hash": "ae1201b08c5b4f0dead2f666bb4d68137fc5ad5a"
+          }
+        },
+        {
+          "client_id": "1092027347375-ipm0qvmnjf7f77g6ihfbeo5pjfv0uo6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsD4PAWYpHMLY_MSXZT2uNE-EyTEZY3eU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092027347375-ipm0qvmnjf7f77g6ihfbeo5pjfv0uo6g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
