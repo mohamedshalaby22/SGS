@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text1.dart';
@@ -13,7 +14,7 @@ import '../components/formfield.dart';
 class ForgetPassword extends StatelessWidget {
   ForgetPassword({Key? key}) : super(key: key);
   var formKey = GlobalKey<FormState>();
-  var resetEmail = TextEditingController();
+  var newPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -59,9 +60,9 @@ class ForgetPassword extends StatelessWidget {
                       height: 7,
                     ),
                     DefaultFormField(
-                        controller: resetEmail,
+                        controller: newPassword,
                         onSave: (value) {
-                          resetEmail = value;
+                          newPassword = value;
                         },
                         validator: (value) {
                           if (value.isEmpty) {
@@ -84,11 +85,13 @@ class ForgetPassword extends StatelessWidget {
                     children: [
                       DefaultButton(
                           text: 'SEND',
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              controller.isLoading.value
-                                  ? null
-                                  : controller.loadCircleProgress();
+                              await Api.changeStudentPassword(newPassword.text,
+                                  showLoading: true);
+                              // controller.isLoading.value
+                              //     ? null
+                              //     : controller.loadCircleProgress();
                               // controller.ForgetPassword(
                               //     resetEmail.text, context);
                             }

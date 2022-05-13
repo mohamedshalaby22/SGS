@@ -83,7 +83,7 @@ class Api {
       {bool showLoading = false}) async {
     try {
       if (showLoading) Alerts.showLoading();
-      final response = await post(
+      final response = await put(
           Uri.parse(
               _baseUrl + '/api/student/change-password?password=$newPassword'),
           encoding: Encoding.getByName('utf-8'),

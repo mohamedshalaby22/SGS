@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/login.dart';
+import 'package:flutter_application_3/Screens/on_borading_screen.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/components/text2.dart';
@@ -45,10 +47,10 @@ class _FourthScreenState extends State<FourthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Obx(() {
-        return SingleChildScrollView(
+    return Obx(() {
+      return Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,47 +104,29 @@ class _FourthScreenState extends State<FourthScreen> {
               const SizedBox(
                 height: defaultPading * 3,
               ),
-              DefaultPersonal(
-                title: 'Faculty :',
-                text: 'Copmuter Information',
-              ),
-              DefaultPersonal(
-                title: 'Student id :',
-                text: '0411281456',
-              ),
-              DefaultPersonal(
-                title: 'Valid until :',
-                text: '30/6/2022',
-              ),
-              DefaultPersonal(
-                title: 'Team :',
-                text: '4',
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultPading),
-                child: Divider(
-                  color: Color(0xffe0e0e0),
-                  thickness: 1.5,
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: defaultPading * 3, horizontal: defaultPading),
+                    vertical: defaultPading * 2, horizontal: defaultPading),
+                child:
+                    DefaultButton(text: 'Save Changes', onPressed: () async {}),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPading),
                 child: DefaultButton(
                     text: 'LOG OUT',
-                    onPressed: () {
+                    onPressed: () async {
                       // _auth.signOut();
-                      Get.offAll(SignIn());
+                      var response = await Api.logout(showLoading: true);
+                      // if (response.isNotEmpty) {
+                      //   Get.offAll(() => const OnBoardingScrean());
+                      // }
                     }),
-              ),
-              const SizedBox(
-                height: defaultPading,
               ),
             ],
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   ModelSheetPicker(BuildContext context) {
