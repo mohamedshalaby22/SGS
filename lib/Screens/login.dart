@@ -14,14 +14,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'forget_passowrd.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   SignIn({Key? key}) : super(key: key);
+
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   var formKey = GlobalKey<FormState>();
+
   AuthController controller = AuthController();
+
   getUser() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('name', controller.email.toString());
   }
+
+  String person = '';
 
   @override
   Widget build(BuildContext context) {
@@ -146,10 +156,45 @@ class SignIn extends StatelessWidget {
                       const SizedBox(
                         height: defaultPading,
                       ),
-                      Align(
-                          child: controller.isLoading.value
-                              ? const CircularProgressIndicator()
-                              : null),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
+                            children: [
+                              Radio(
+                                  value: 'Doctor',
+                                  groupValue: person,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      person = value.toString();
+                                    });
+                                  }),
+                              Text1(
+                                text: 'Doctor',
+                                size: 17,
+                                color: Colors.grey.shade500,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Radio(
+                                  value: 'Student',
+                                  groupValue: person,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      person = value.toString();
+                                    });
+                                  }),
+                              Text1(
+                                text: 'Student',
+                                size: 17,
+                                color: Colors.grey.shade500,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
                     ],
                   ),
                   const SizedBox(
@@ -174,25 +219,6 @@ class SignIn extends StatelessWidget {
                       const SizedBox(
                         height: 7,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text1(text: 'Don\'t have an account'),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(SignUp(),
-                                  transition: Transition.leftToRight);
-                            },
-                            child: Text1(
-                              text: 'Sign-Up',
-                              color: primaryColor,
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   )
                 ],

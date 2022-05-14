@@ -121,7 +121,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: name,
-                    hint: 'Networks',
+                    hint: 'Subject Name',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
@@ -144,7 +144,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: mid,
-                    hint: '20',
+                    hint: '0',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
@@ -167,7 +167,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: oral,
-                    hint: '20',
+                    hint: '0',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
@@ -190,7 +190,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: practical,
-                    hint: '20',
+                    hint: '0',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
@@ -213,7 +213,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: totalDg,
-                    hint: '90',
+                    hint: '0',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
@@ -236,7 +236,7 @@ class AddSubject extends StatelessWidget {
                   ),
                   DefaultFormField(
                     controller: hours,
-                    hint: '3',
+                    hint: '1',
                     onSave: () {},
                     validator: (value) {
                       if (value.isEmpty) {
