@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'Binding/binding.dart';
 
 bool isFirst = true;
+bool isDoctor = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

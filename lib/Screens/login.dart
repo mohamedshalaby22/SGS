@@ -9,6 +9,7 @@ import 'package:flutter_application_3/components/formfield.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/controller/auth.dart';
+import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,8 +31,6 @@ class _SignInState extends State<SignIn> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('name', controller.email.toString());
   }
-
-  String person = '';
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +142,7 @@ class _SignInState extends State<SignIn> {
                         onPressed: () async {
                           formKey.currentState!.save();
                           if (formKey.currentState!.validate()) {
-                            await Api.loginStudent(
+                            await Api.login(
                                 controller.email!, controller.password!,
                                 showLoading: true);
                             getUser();
@@ -162,12 +161,11 @@ class _SignInState extends State<SignIn> {
                           Row(
                             children: [
                               Radio(
-                                  value: 'Doctor',
-                                  groupValue: person,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      person = value.toString();
-                                    });
+                                  value: true,
+                                  groupValue: isDoctor,
+                                  onChanged: (bool? value) {
+                                    isDoctor = value!;
+                                    setState(() {});
                                   }),
                               Text1(
                                 text: 'Doctor',
@@ -179,12 +177,11 @@ class _SignInState extends State<SignIn> {
                           Row(
                             children: [
                               Radio(
-                                  value: 'Student',
-                                  groupValue: person,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      person = value.toString();
-                                    });
+                                  value: false,
+                                  groupValue: isDoctor,
+                                  onChanged: (bool? value) {
+                                    isDoctor = value!;
+                                    setState(() {});
                                   }),
                               Text1(
                                 text: 'Student',

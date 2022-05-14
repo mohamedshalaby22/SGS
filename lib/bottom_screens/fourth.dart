@@ -141,7 +141,6 @@ class _FourthScreenState extends State<FourthScreen> {
                       child: DefaultButton(
                           text: 'LOG OUT',
                           onPressed: () async {
-                            await Api.logout(showLoading: false);
                             await SharedPrefrencesStorage.logOut();
                             Get.offAll(() => SignIn());
                           }),

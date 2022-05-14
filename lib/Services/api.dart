@@ -4,6 +4,7 @@ import 'package:flutter_application_3/Models/user_model.dart';
 import 'package:flutter_application_3/Services/sharedprefrences.dart';
 import 'package:flutter_application_3/alerts.dart';
 import 'package:flutter_application_3/bottom_screens/home_layout.dart';
+import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,7 @@ class Api {
     return {"Accept": "application/json", "Authorization": "Bearer $token"};
   }
 
-  static Future<Map> loginStudent(
+  static Future<Map> login(
     String email,
     String password, {
     bool showLoading = false,
@@ -24,8 +25,8 @@ class Api {
     try {
       if (showLoading) Alerts.showLoading();
       final response = await post(
-          Uri.parse(
-              _baseUrl + '/api/student/login?email=$email&password=$password'),
+          Uri.parse(_baseUrl +
+              '/api/${isDoctor ? "doctor" : "student"}/login?email=$email&password=$password'),
           encoding: Encoding.getByName('utf-8'),
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
@@ -186,9 +187,7 @@ class Api {
 
       http.MultipartFile multipartFile =
           await http.MultipartFile.fromPath('file', image.path);
-
       request.files.add(multipartFile);
-
       request.headers.addAll(await _getHeaders());
 
       final responseStream = await request.send();
@@ -203,5 +202,24 @@ class Api {
       Alerts.showSnackBar();
     }
     return {};
+  }
+
+  static Future<List> getHome() async {
+    try {
+      final response = await get(
+          Uri.parse(_baseUrl +
+              (isDoctor
+                  ? "/api/doctor/show-doctor-subject"
+                  : "/api/student/subjects")),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        return parsed['data'];
+      }
+      Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      Alerts.showSnackBar();
+    }
+    return [];
   }
 }

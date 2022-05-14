@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/add_subject.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/detail1.dart';
+import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -58,12 +60,14 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => AddSubject(), transition: Transition.zoom);
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: isDoctor
+          ? FloatingActionButton(
+              onPressed: () {
+                Get.to(() => AddSubject(), transition: Transition.zoom);
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       appBar: AppBar(
         title: Text(
           'SGS',
@@ -113,73 +117,91 @@ class _FirstScreenState extends State<FirstScreen> {
               height: defaultPading * 2,
             ),
             Expanded(
-              child: GridView.builder(
-                  itemCount: items.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: defaultPading,
-                      crossAxisSpacing: defaultPading),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onLongPress: () {
-                        deafultDialog(context);
-                      },
-                      onTap: () {
-                        Get.to(() => Detail1(items[index]),
-                            transition: Transition.leftToRight);
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 400),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey.shade50,
-                            border: Border.all(
-                                width: 1, color: Colors.grey.shade200),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.blue.shade50,
-                                  offset: const Offset(4, 4),
-                                  blurRadius: 15,
-                                  spreadRadius: 1),
-                            ]),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 90,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(10)),
+                child: FutureBuilder<List>(
+                    future: Api.getHome(),
+                    builder: (_, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasData && snapshot.data!.isEmpty) {
+                        return const Center(child: Text('لا توجد بيانات'));
+                      }
+                      final items = snapshot.data!
+                          .map((e) => Data(
+                                doctorName: '',
+                                image: e["file"] ?? "",
+                                subjects: e["subject_name"] ?? "",
+                              ))
+                          .toList();
+                      return GridView.builder(
+                          itemCount: items.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: defaultPading,
+                                  crossAxisSpacing: defaultPading),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onLongPress: () {
+                                deafultDialog(context);
+                              },
+                              onTap: () {
+                                Get.to(() => Detail1(items[index]),
+                                    transition: Transition.leftToRight);
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 400),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey.shade50,
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey.shade200),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.blue.shade50,
+                                          offset: const Offset(4, 4),
+                                          blurRadius: 15,
+                                          spreadRadius: 1),
+                                    ]),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 90,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.circular(10)),
+                                      ),
+                                      child: Container(
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(10)),
+                                          ),
+                                          child: CachedNetworkImage(
+                                            imageUrl: items[index].image,
+                                            fit: BoxFit.fill,
+                                          )),
+                                    ),
+                                    const SizedBox(
+                                      height: defaultPading,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        items[index].subjects,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Container(
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(10)),
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: items[index].image,
-                                    fit: BoxFit.fill,
-                                  )),
-                            ),
-                            const SizedBox(
-                              height: defaultPading,
-                            ),
-                            Expanded(
-                              child: Text(
-                                items[index].subjects,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+                            );
+                          });
+                    })),
           ],
         ),
       ),
