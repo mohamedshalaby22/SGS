@@ -1,17 +1,21 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Models/user_model.dart';
+import 'package:flutter_application_3/Services/sharedprefrences.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   String? email, password, name, selectedItem;
   var resetEmail = TextEditingController();
   var isLoading = false.obs;
-
+  Rx<UserModel> userModel = UserModel().obs;
   var isChecked = false.obs;
   var isProfilePickedPath = false.obs;
   var profilePickedPath = "".obs;
   String? imagePath;
+  bool get loggedUserIsNotNull => userModel.value.id != null;
+
   // FirebaseAuth auth = FirebaseAuth.instance;
   // final Rxn<User> _user = Rxn<User>();
   //عشان اعرض قيمه اليوزر
@@ -105,6 +109,10 @@ class AuthController extends GetxController {
   void pickedPath(String path) {
     profilePickedPath.value = path;
     isProfilePickedPath.value = true;
+  }
+
+  Future<void> getUser() async {
+    userModel.value = (await SharedPrefrencesStorage.getSavedUser())!;
   }
 
   //Suffix Icon password

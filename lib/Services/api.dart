@@ -67,6 +67,7 @@ class Api {
       final responseStream = await request.send();
       final response = await http.Response.fromStream(responseStream);
       final parsed = jsonDecode(response.body);
+     
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
         return parsed['data'];
@@ -111,7 +112,7 @@ class Api {
       if (response.statusCode == 200 && parsed['status'] == 200) {
         return parsed['data'];
       }
-      Alerts.showSnackBar(msg: parsed['message']);
+      // Alerts.showSnackBar(msg: parsed['message']);
     } catch (e) {
       if (showLoading) Get.back();
       Alerts.showSnackBar();

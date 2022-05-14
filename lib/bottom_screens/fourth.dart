@@ -3,9 +3,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Models/user_model.dart';
 import 'package:flutter_application_3/Screens/login.dart';
 import 'package:flutter_application_3/Screens/on_borading_screen.dart';
 import 'package:flutter_application_3/Services/api.dart';
+import 'package:flutter_application_3/Services/sharedprefrences.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/components/text2.dart';
@@ -13,7 +15,6 @@ import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/controller/auth.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FourthScreen extends StatefulWidget {
   const FourthScreen({Key? key}) : super(key: key);
@@ -23,109 +24,112 @@ class FourthScreen extends StatefulWidget {
 }
 
 class _FourthScreenState extends State<FourthScreen> {
-  String username = '';
-
   AuthController controller = Get.put(AuthController());
-
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   File? pickedFile;
 
   ImagePicker imagePicker = ImagePicker();
+
   @override
   void initState() {
-    getUser();
+    controller.getUser();
     super.initState();
-  }
-
-  getUser() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      username = pref.getString('name')!;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Stack(
+      return !controller.loggedUserIsNotNull
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Scaffold(
+              appBar: AppBar(),
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: 85,
-                      child: CircleAvatar(
-                        radius: 70,
-                        backgroundImage: controller.isProfilePickedPath.value ==
-                                true
-                            ? FileImage(
-                                    File(controller.profilePickedPath.value))
-                                as ImageProvider
-                            : const AssetImage('assets/p1.png'),
+                    Center(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 85,
+                            child: CircleAvatar(
+                              radius: 70,
+                              backgroundImage: controller
+                                          .isProfilePickedPath.value ==
+                                      true
+                                  ? FileImage(
+                                      File(controller.profilePickedPath.value))
+                                  : controller.userModel.value.photo != null
+                                      ? NetworkImage(
+                                              controller.userModel.value.photo!)
+                                          as ImageProvider
+                                      : const AssetImage('assets/p1.png'),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 5.0,
+                            right: 30.0,
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.blue.shade100,
+                              child: IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(25))),
+                                        context: (context),
+                                        builder: (context) =>
+                                            ModelSheetPicker(context));
+                                  },
+                                  icon: const Icon(
+                                    Icons.add_a_photo_rounded,
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 5.0,
-                      right: 30.0,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.blue.shade100,
-                        child: IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(25))),
-                                  context: (context),
-                                  builder: (context) =>
-                                      ModelSheetPicker(context));
-                            },
-                            icon: const Icon(
-                              Icons.add_a_photo_rounded,
-                              color: Colors.black,
-                            )),
-                      ),
-                    )
+                    const SizedBox(
+                      height: defaultPading,
+                    ),
+                    Text2(text: controller.userModel.value.email!),
+                    const SizedBox(
+                      height: defaultPading * 3,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: defaultPading * 2,
+                          horizontal: defaultPading),
+                      child: DefaultButton(
+                          text: 'Save Changes',
+                          onPressed: () async {
+                            await Api.uploadStudentPhoto(pickedFile!);
+                          }),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: defaultPading),
+                      child: DefaultButton(
+                          text: 'LOG OUT',
+                          onPressed: () async {
+                            final res = await Api.logout(showLoading: true);
+                            if (res.isNotEmpty) {
+                              await SharedPrefrencesStorage.logOut();
+                              Get.offAll(() => SignIn());
+                            }
+                          }),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: defaultPading,
-              ),
-              Text2(text: username),
-              const SizedBox(
-                height: defaultPading * 3,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: defaultPading * 2, horizontal: defaultPading),
-                child:
-                    DefaultButton(text: 'Save Changes', onPressed: () async {}),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPading),
-                child: DefaultButton(
-                    text: 'LOG OUT',
-                    onPressed: () async {
-                      // _auth.signOut();
-                      var response = await Api.logout(showLoading: true);
-                      // if (response.isNotEmpty) {
-                      //   Get.offAll(() => const OnBoardingScrean());
-                      // }
-                    }),
-              ),
-            ],
-          ),
-        ),
-      );
+            );
     });
   }
 

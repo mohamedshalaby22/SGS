@@ -47,4 +47,9 @@ class SharedPrefrencesStorage {
     await _getInstance();
     return _prefs!.getBool(savedIsFirstKey) ?? true;
   }
+
+  static Future<bool> logOut() async {
+    await _getInstance();
+    return _prefs!.clear();
+  }
 }
