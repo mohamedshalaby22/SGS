@@ -3,14 +3,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/Models/user_model.dart';
 import 'package:flutter_application_3/Screens/login.dart';
-import 'package:flutter_application_3/Screens/on_borading_screen.dart';
 import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/Services/sharedprefrences.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/text1.dart';
-import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/controller/auth.dart';
 import 'package:get/get.dart';
@@ -72,7 +69,7 @@ class _FourthScreenState extends State<FourthScreen> {
                           ),
                           Positioned(
                             bottom: 5.0,
-                            right: 30.0,
+                            right: 15.0,
                             child: CircleAvatar(
                               radius: 20,
                               backgroundColor: Colors.blue.shade100,
@@ -92,26 +89,51 @@ class _FourthScreenState extends State<FourthScreen> {
                                     color: Colors.black,
                                   )),
                             ),
-                          )
+                          ),
+                          if (controller.isProfilePickedPath.value ||
+                              controller.userModel.value.photo != null)
+                            Positioned(
+                              bottom: 5.0,
+                              left: 15.0,
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.red.shade400,
+                                child: IconButton(
+                                    onPressed: onDeletePress,
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            )
                         ],
                       ),
                     ),
                     const SizedBox(
                       height: defaultPading,
                     ),
-                    Text2(text: controller.userModel.value.email!),
-                    const SizedBox(
-                      height: defaultPading * 3,
+                    Text(
+                      controller.userModel.value.name!,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.black87),
                     ),
+                    const SizedBox(height: defaultPading / 3),
+                    Text(
+                      controller.userModel.value.email!,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black87.withOpacity(0.7)),
+                    ),
+                    const SizedBox(height: defaultPading * 3),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: defaultPading * 2,
                           horizontal: defaultPading),
                       child: DefaultButton(
-                          text: 'Save Changes',
-                          onPressed: () async {
-                            await Api.uploadStudentPhoto(pickedFile!);
-                          }),
+                          text: 'Save Changes', onPressed: onSavedPress),
                     ),
                     Padding(
                       padding:
@@ -119,11 +141,9 @@ class _FourthScreenState extends State<FourthScreen> {
                       child: DefaultButton(
                           text: 'LOG OUT',
                           onPressed: () async {
-                            final res = await Api.logout(showLoading: true);
-                            if (res.isNotEmpty) {
-                              await SharedPrefrencesStorage.logOut();
-                              Get.offAll(() => SignIn());
-                            }
+                            await Api.logout(showLoading: false);
+                            await SharedPrefrencesStorage.logOut();
+                            Get.offAll(() => SignIn());
                           }),
                     ),
                   ],
@@ -207,6 +227,31 @@ class _FourthScreenState extends State<FourthScreen> {
     pickedFile = File(pickedImage!.path);
     controller.pickedPath(pickedFile!.path);
     Get.back();
+  }
+
+  Future onSavedPress() async {
+    if (controller.profilePickedPath.value.isNotEmpty) {
+      final result =
+          await Api.uploadStudentPhoto(pickedFile!, showLoading: true);
+      if (result.isNotEmpty) {
+        controller.emptyProfilePickedPath();
+        controller.getUser();
+      }
+    } else {
+      AuthController().snackBar(context, 'Already up to date');
+    }
+  }
+
+  Future onDeletePress() async {
+    if (controller.isProfilePickedPath.value) {
+      controller.emptyProfilePickedPath();
+    } else {
+      final result = await Api.deleteProfileImage(showLoading: true);
+      if (result.isNotEmpty) {
+        controller.getUser();
+        controller.emptyProfilePickedPath();
+      }
+    }
   }
 }
 

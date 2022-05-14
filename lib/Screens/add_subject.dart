@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/formfield.dart';
 import 'package:flutter_application_3/components/text1.dart';
@@ -283,37 +284,37 @@ class AddSubject extends StatelessWidget {
                   const SizedBox(
                     height: defaultPading,
                   ),
-                  Text1(
-                    text: 'Select_Department',
-                    size: 17,
-                  ),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                  DropdownButtonFormField<String>(
-                    hint: const Text(
-                      'Computer System (Cs)',
-                    ),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    value: controller.selectedItem,
-                    items: controller.items2
-                        .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            )))
-                        .toList(),
-                    onChanged: (item) {
-                      controller.ChangeSelected(item!);
-                    },
-                  ),
+                  // Text1(
+                  //   text: 'Select_Department',
+                  //   size: 17,
+                  // ),
+                  // const SizedBox(
+                  //   height: 7,
+                  // ),
+                  // DropdownButtonFormField<String>(
+                  //   hint: const Text(
+                  //     'Computer System (Cs)',
+                  //   ),
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(10)),
+                  //   ),
+                  //   value: controller.selectedItem,
+                  //   items: controller.items2
+                  //       .map((item) => DropdownMenuItem<String>(
+                  //           value: item,
+                  //           child: Text(
+                  //             item,
+                  //             style: TextStyle(
+                  //                 color: Colors.grey.shade600,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 fontSize: 15),
+                  //           )))
+                  //       .toList(),
+                  //   onChanged: (item) {
+                  //     controller.ChangeSelected(item!);
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -324,9 +325,7 @@ class AddSubject extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPading),
         child: DefaultButton(
             text: 'Add Subject',
-            onPressed: () {
-              if (formKey.currentState!.validate()) {}
-            }),
+            onPressed: () async => await addSubject(context)),
       ),
     );
   }
@@ -336,6 +335,29 @@ class AddSubject extends StatelessWidget {
         await imagePicker.pickImage(source: source, imageQuality: 100);
     pickedFile = File(pickedImage!.path);
     controller.pickedPath(pickedFile!.path);
-    Get.back();
+  }
+
+  Future addSubject(context) async {
+    if (formKey.currentState!.validate() &&
+        controller.isProfilePickedPath.value) {
+      final res = await Api.addSubject(
+          name.text.trim(),
+          oral.text.trim(),
+          practical.text.trim(),
+          mid.text.trim(),
+          totalDg.text.trim(),
+          (controller.items.indexOf(
+                      controller.selectedItem ?? controller.items.first) +
+                  1)
+              .toString(),
+          hours.text.trim(),
+          File(controller.profilePickedPath.value),
+          showLoading: true);
+      if (res.isNotEmpty) {
+        Navigator.of(context).pop(true);
+      }
+    } else {
+      AuthController().snackBar(context, 'please complete data !!');
+    }
   }
 }

@@ -15,7 +15,10 @@ class AuthController extends GetxController {
   var profilePickedPath = "".obs;
   String? imagePath;
   bool get loggedUserIsNotNull => userModel.value.id != null;
-
+  emptyProfilePickedPath() {
+    profilePickedPath.value = '';
+    isProfilePickedPath.value = false;
+  }
   // FirebaseAuth auth = FirebaseAuth.instance;
   // final Rxn<User> _user = Rxn<User>();
   //عشان اعرض قيمه اليوزر

@@ -67,9 +67,12 @@ class Api {
       final responseStream = await request.send();
       final response = await http.Response.fromStream(responseStream);
       final parsed = jsonDecode(response.body);
-     
+
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
+        final user = UserModel.fromJson(parsed['data']);
+        await SharedPrefrencesStorage.saveUser(jsonEncode(user.toJson()));
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];
       }
       Alerts.showSnackBar(msg: parsed['message']);
@@ -130,6 +133,9 @@ class Api {
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
+        final user = UserModel.fromJson(parsed['data']);
+        await SharedPrefrencesStorage.saveUser(jsonEncode(user.toJson()));
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];
       }
       Alerts.showSnackBar(msg: parsed['message']);
@@ -152,6 +158,46 @@ class Api {
         return parsed['data'];
       }
       Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      if (showLoading) Get.back();
+      Alerts.showSnackBar();
+    }
+    return {};
+  }
+
+  static Future<Map> addSubject(
+    String subjectName,
+    String oralDegree,
+    String practicalDegree,
+    String midTermDegree,
+    String finalDegree,
+    String yearId,
+    String nOfHours,
+    File image, {
+    bool showLoading = false,
+  }) async {
+    try {
+      if (showLoading) Alerts.showLoading();
+      http.MultipartRequest request = http.MultipartRequest(
+        "POST",
+        Uri.parse(_baseUrl +
+            '/api/doctor/insert-subject?subject_name=$subjectName&oral_degree=$oralDegree&practical_degree=$practicalDegree&midTerm_degree=$midTermDegree&final_degree=$finalDegree&year_id=$yearId&No_of_hours=$nOfHours'),
+      );
+
+      http.MultipartFile multipartFile =
+          await http.MultipartFile.fromPath('file', image.path);
+
+      request.files.add(multipartFile);
+
+      request.headers.addAll(await _getHeaders());
+
+      final responseStream = await request.send();
+      final response = await http.Response.fromStream(responseStream);
+      final parsed = jsonDecode(response.body);
+      if (showLoading) Get.back();
+      bool isSuccess = response.statusCode == 200;
+      Alerts.showSnackBar(msg: parsed['message'], isError: !isSuccess);
+      return parsed['data'] ?? {};
     } catch (e) {
       if (showLoading) Get.back();
       Alerts.showSnackBar();
