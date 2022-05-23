@@ -29,6 +29,8 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  final img =
+      'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80';
   List<Data> items = [
     Data(
         subjects: 'Computer Graphics',
@@ -63,7 +65,8 @@ class _FirstScreenState extends State<FirstScreen> {
       floatingActionButton: isDoctor
           ? FloatingActionButton(
               onPressed: () {
-                Get.to(() => AddSubject(), transition: Transition.zoom);
+                Get.to(() => AddSubject(), transition: Transition.zoom)!
+                    .then((value) => setState(() {}));
               },
               child: const Icon(Icons.add),
             )
@@ -129,78 +132,83 @@ class _FirstScreenState extends State<FirstScreen> {
                       final items = snapshot.data!
                           .map((e) => Data(
                                 doctorName: '',
-                                image: e["file"] ?? "",
+                                image: img,
                                 subjects: e["subject_name"] ?? "",
                               ))
                           .toList();
-                      return GridView.builder(
-                          itemCount: items.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: defaultPading,
-                                  crossAxisSpacing: defaultPading),
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onLongPress: () {
-                                deafultDialog(context);
-                              },
-                              onTap: () {
-                                Get.to(() => Detail1(items[index]),
-                                    transition: Transition.leftToRight);
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 400),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey.shade50,
-                                    border: Border.all(
-                                        width: 1, color: Colors.grey.shade200),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.blue.shade50,
-                                          offset: const Offset(4, 4),
-                                          blurRadius: 15,
-                                          spreadRadius: 1),
-                                    ]),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 90,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade200,
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(10)),
+                      return RefreshIndicator(
+                        onRefresh: () async => setState(() {}),
+                        child: GridView.builder(
+                            itemCount: items.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: defaultPading,
+                                    crossAxisSpacing: defaultPading),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onLongPress: () {
+                                  deafultDialog(context);
+                                },
+                                onTap: () {
+                                  Get.to(() => Detail1(items[index]),
+                                      transition: Transition.leftToRight);
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 400),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.grey.shade50,
+                                      border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey.shade200),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.blue.shade50,
+                                            offset: const Offset(4, 4),
+                                            blurRadius: 15,
+                                            spreadRadius: 1),
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 90,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                  top: Radius.circular(10)),
+                                        ),
+                                        child: Container(
+                                            clipBehavior: Clip.hardEdge,
+                                            decoration: const BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                      top: Radius.circular(10)),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl: items[index].image,
+                                              fit: BoxFit.fill,
+                                            )),
                                       ),
-                                      child: Container(
-                                          clipBehavior: Clip.hardEdge,
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(10)),
-                                          ),
-                                          child: CachedNetworkImage(
-                                            imageUrl: items[index].image,
-                                            fit: BoxFit.fill,
-                                          )),
-                                    ),
-                                    const SizedBox(
-                                      height: defaultPading,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        items[index].subjects,
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
+                                      const SizedBox(
+                                        height: defaultPading,
                                       ),
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: Text(
+                                          items[index].subjects,
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          });
+                              );
+                            }),
+                      );
                     })),
           ],
         ),

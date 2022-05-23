@@ -222,4 +222,74 @@ class Api {
     }
     return [];
   }
+
+  static Future<Map> addPost(
+      File? image, String title, String body, String subjectId,
+      {bool showLoading = false, bool update = false}) async {
+    try {
+      if (showLoading) Alerts.showLoading();
+
+      http.MultipartRequest request = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+          _baseUrl +
+              '/api/doctor/${update ? "update-post" : "insert-post"}?title=$title&body=$body&subject_id=$subjectId',
+        ),
+      );
+      if (image != null) {
+        http.MultipartFile multipartFile =
+            await http.MultipartFile.fromPath('file', image.path);
+        request.files.add(multipartFile);
+      }
+      request.headers.addAll(await _getHeaders());
+
+      final responseStream = await request.send();
+      final response = await http.Response.fromStream(responseStream);
+      final parsed = jsonDecode(response.body);
+
+      if (showLoading) Get.back();
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
+        return parsed['data'];
+      }
+      Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      if (showLoading) Get.back();
+      Alerts.showSnackBar();
+    }
+    return {};
+  }
+  
+  static Future<Map> updatePost(
+    File image,
+    String title,
+    String body,
+    String subjectId, {
+    bool showLoading = false,
+  }) async {
+    return await addPost(image, title, body, subjectId,
+        showLoading: showLoading, update: true);
+  }
+
+   static Future<Map> deletePost(String postId,{bool showLoading = false}) async {
+    try {
+      if (showLoading) Alerts.showLoading();
+      final response = await delete(
+          Uri.parse(_baseUrl + '/api/doctor/delete-post/$postId'),
+          encoding: Encoding.getByName('utf-8'),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (showLoading) Get.back();
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
+        return parsed['data'];
+      }
+      Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      if (showLoading) Get.back();
+      Alerts.showSnackBar();
+    }
+    return {};
+  }
+
 }
