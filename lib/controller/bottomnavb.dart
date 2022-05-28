@@ -16,7 +16,7 @@ class BottomNavBar extends GetxController {
     const BottomNavigationBarItem(
         icon: Icon(Icons.home_work_outlined), label: 'Home'),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.school_outlined), label: 'Read'),
+        icon: Icon(Icons.school_outlined), label: 'Quizzes'),
     const BottomNavigationBarItem(
         icon: Icon(Icons.maps_ugc_outlined), label: 'Message'),
     const BottomNavigationBarItem(

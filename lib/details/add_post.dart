@@ -1,12 +1,13 @@
 import 'dart:developer';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/formfield.dart';
 import 'package:flutter_application_3/constant/const.dart';
+import 'package:flutter_application_3/controller/auth.dart';
+import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
-
 import '../components/text1.dart';
 
 class AddPostScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   var title = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
+  AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +155,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
         child: DefaultButton(
             text: 'Add Post',
             onPressed: () {
-              if (formKey.currentState!.validate()) {}
+              if (formKey.currentState!.validate()) {
+                // Api.addPost(image, '', body, subjectId)
+              }
             }),
       ),
     );

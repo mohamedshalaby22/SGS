@@ -259,7 +259,7 @@ class Api {
     }
     return {};
   }
-  
+
   static Future<Map> updatePost(
     File image,
     String title,
@@ -271,7 +271,8 @@ class Api {
         showLoading: showLoading, update: true);
   }
 
-   static Future<Map> deletePost(String postId,{bool showLoading = false}) async {
+  static Future<Map> deletePost(String postId,
+      {bool showLoading = false}) async {
     try {
       if (showLoading) Alerts.showLoading();
       final response = await delete(
@@ -291,5 +292,4 @@ class Api {
     }
     return {};
   }
-
 }

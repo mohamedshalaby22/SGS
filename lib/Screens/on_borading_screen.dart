@@ -142,7 +142,7 @@ class _OnBoardingScreanState extends State<OnBoardingScrean> {
                               splashData.length - 1) {
                             await SharedPrefrencesStorage.saveIsFirst(false);
 
-                            Get.offAll(() => SignIn(),
+                            Get.offAll(() => const SignIn(),
                                 transition: Transition.leftToRight);
                           }
                           _controller.nextPage(
@@ -169,7 +169,7 @@ class DasText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'SGS',
+      'SG System',
       style: TextStyle(
           color: primaryColor, fontSize: 30, fontWeight: FontWeight.bold),
     );

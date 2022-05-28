@@ -284,37 +284,6 @@ class AddSubject extends StatelessWidget {
                   const SizedBox(
                     height: defaultPading,
                   ),
-                  // Text1(
-                  //   text: 'Select_Department',
-                  //   size: 17,
-                  // ),
-                  // const SizedBox(
-                  //   height: 7,
-                  // ),
-                  // DropdownButtonFormField<String>(
-                  //   hint: const Text(
-                  //     'Computer System (Cs)',
-                  //   ),
-                  //   decoration: InputDecoration(
-                  //     border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(10)),
-                  //   ),
-                  //   value: controller.selectedItem,
-                  //   items: controller.items2
-                  //       .map((item) => DropdownMenuItem<String>(
-                  //           value: item,
-                  //           child: Text(
-                  //             item,
-                  //             style: TextStyle(
-                  //                 color: Colors.grey.shade600,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontSize: 15),
-                  //           )))
-                  //       .toList(),
-                  //   onChanged: (item) {
-                  //     controller.ChangeSelected(item!);
-                  //   },
-                  // ),
                 ],
               ),
             ),

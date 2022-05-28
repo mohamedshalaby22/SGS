@@ -4,6 +4,7 @@ import 'package:flutter_application_3/bottom_screens/first_screen.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
+import 'package:flutter_application_3/controller/auth.dart';
 import 'package:flutter_application_3/details/aaignments.dart';
 import 'package:flutter_application_3/details/attachments.dart';
 import 'package:flutter_application_3/details/posts.dart';
@@ -17,7 +18,7 @@ class Detail1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-
+    AuthController controller = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(leading: const LeadingIcon()),
       body: Padding(
@@ -57,9 +58,10 @@ class Detail1 extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            'Dr: ' + data.doctorName,
+                            controller.userModel.value.name!,
                             style: TextStyle(
                                 color: Colors.grey.shade600,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],

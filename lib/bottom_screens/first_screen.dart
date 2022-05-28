@@ -73,7 +73,7 @@ class _FirstScreenState extends State<FirstScreen> {
           : null,
       appBar: AppBar(
         title: Text(
-          'SGS',
+          'SG System',
           style: TextStyle(
               color: primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
         ),
@@ -139,6 +139,7 @@ class _FirstScreenState extends State<FirstScreen> {
                       return RefreshIndicator(
                         onRefresh: () async => setState(() {}),
                         child: GridView.builder(
+                            physics: const BouncingScrollPhysics(),
                             itemCount: items.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(

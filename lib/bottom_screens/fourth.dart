@@ -142,7 +142,7 @@ class _FourthScreenState extends State<FourthScreen> {
                           text: 'LOG OUT',
                           onPressed: () async {
                             await SharedPrefrencesStorage.logOut();
-                            Get.offAll(() => SignIn());
+                            Get.offAll(() => const SignIn());
                           }),
                     ),
                   ],

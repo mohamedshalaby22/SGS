@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       final result = await SharedPrefrencesStorage.getSavedUser();
       if (result == null) {
-        return Get.offAll(() => SignIn());
+        return Get.offAll(() => const SignIn());
       }
       return Get.offAll(() => const HomeLayOut());
     });

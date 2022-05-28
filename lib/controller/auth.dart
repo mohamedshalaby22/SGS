@@ -96,6 +96,16 @@ class AuthController extends GetxController {
     item = value;
   }
 
+  String? item3;
+  List<String> items3 = [
+    'Hours',
+    'Seconds',
+    'Days',
+  ];
+  void ChangeSelected3(value) {
+    item = value;
+  }
+
   //Loading CircleProgress In Press Login
   void loadCircleProgress() async {
     isLoading.value = true;
