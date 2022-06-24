@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/addquiezquest.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/formfield.dart';
 import 'package:flutter_application_3/constant/const.dart';
@@ -19,6 +20,7 @@ class AddQuiezNotes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController controller = Get.put(AuthController());
+    controller.getSubjects();
 
     return Scaffold(
       appBar: AppBar(
@@ -109,35 +111,37 @@ class AddQuiezNotes extends StatelessWidget {
                   height: defaultPading,
                 ),
                 Text1(
-                  text: 'Enter the Duration',
+                  text: 'Choose subjects',
                   size: 17,
                 ),
                 const SizedBox(
                   height: 7,
                 ),
-                DropdownButtonFormField<String>(
-                  hint: const Text(
-                    'Hours',
+                Obx(
+                  () => DropdownButtonFormField<String>(
+                    hint: const Text(
+                      'Subjects',
+                    ),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    value: controller.item3.value,
+                    items: controller.items3
+                        .map((item) => DropdownMenuItem<String>(
+                            value: item['id'].toString(),
+                            child: Text(
+                              item['subject_name'],
+                              style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            )))
+                        .toList(),
+                    onChanged: (item) {
+                      controller.ChangeSelected3(item!);
+                    },
                   ),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  value: controller.selectedItem,
-                  items: controller.items3
-                      .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          )))
-                      .toList(),
-                  onChanged: (item) {
-                    controller.ChangeSelected3(item!);
-                  },
                 ),
                 const SizedBox(
                   height: defaultPading,
@@ -160,10 +164,27 @@ class AddQuiezNotes extends StatelessWidget {
                 ),
                 DefaultButton(
                     text: 'Create Assignment',
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Get.to(() => const CreateQuiez(),
-                            transition: Transition.leftToRight);
+                    onPressed: () async {
+                      if (formKey.currentState!.validate() &&
+                          controller.item3.value.isNotEmpty) {
+                        final data = {
+                          'desc': notes.text.trim(),
+                          'qn': number.text.trim(),
+                          'td': degree.text.trim(),
+                          'id': controller.item3.value.trim(),
+                        };
+                        await Api.addQuiz(
+                                controller.item3.value.trim(),
+                                number.text.trim(),
+                                notes.text.trim(),
+                                degree.text.trim(),
+                                hour.text.trim())
+                            .then((value) {
+                          if (value.isNotEmpty) {
+                            Get.to(() => CreateQuiez(data),
+                                transition: Transition.leftToRight);
+                          }
+                        });
                       }
                     })
               ],

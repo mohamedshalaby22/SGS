@@ -311,7 +311,6 @@ class Api {
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
-        Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];
       }
       Alerts.showSnackBar(msg: parsed['message']);
@@ -477,9 +476,11 @@ class Api {
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
+
       if (response.statusCode == 200 && parsed['status'] == 200) {
         Alerts.showSnackBar(msg: parsed['message'], isError: false);
-        return parsed['data'];
+
+        return parsed;
       }
       Alerts.showSnackBar(msg: parsed['message']);
     } catch (e) {

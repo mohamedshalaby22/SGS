@@ -7,11 +7,11 @@ class DefaultButton extends StatelessWidget {
     Key? key,
     this.width = double.infinity,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
   }) : super(key: key);
   String text;
   double width;
-  Function onPressed;
+  VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +19,18 @@ class DefaultButton extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                secColor,
-                thiColor,
-              ])),
+          color: Colors.grey,
+          gradient: onPressed == null
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                      secColor,
+                      thiColor,
+                    ])),
       child: TextButton(
-          onPressed: () {
-            onPressed();
-          },
+          onPressed: onPressed,
           child: Text(text,
               style: TextStyle(
                 fontSize: 18,

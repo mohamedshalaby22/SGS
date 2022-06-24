@@ -15,6 +15,7 @@ class DefaultFormField extends StatelessWidget {
       this.suffix,
       this.controller,
       this.hint,
+      this.readOnly=false,
       this.maxLines = 1})
       : super(key: key);
   TextInputType type;
@@ -27,9 +28,11 @@ class DefaultFormField extends StatelessWidget {
   bool isPassword;
   String? hint;
   int maxLines;
+  bool readOnly;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly:readOnly ,
       maxLines: maxLines,
       controller: controller,
       validator: validator,

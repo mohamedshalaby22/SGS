@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Models/user_model.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/Services/sharedprefrences.dart';
 import 'package:get/get.dart';
 
@@ -96,14 +97,15 @@ class AuthController extends GetxController {
     item = value;
   }
 
-  String? item3;
-  List<String> items3 = [
-    'Hours',
-    'Seconds',
-    'Days',
-  ];
+  RxString item3 = ''.obs;
+  RxList items3 = [].obs;
+  getSubjects() async {
+    final res = await Api.getHome();
+    items3.value = [...res];
+  }
+
   void ChangeSelected3(value) {
-    item = value;
+    item3.value = value;
   }
 
   //Loading CircleProgress In Press Login
