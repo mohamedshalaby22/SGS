@@ -7,13 +7,13 @@ class Alerts {
         Dialog(
             child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
               CircularProgressIndicator(),
-              SizedBox(height: 32),
+              // SizedBox(width: 32),
               Text("Loading please wait..."),
             ],
           ),

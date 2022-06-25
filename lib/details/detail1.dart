@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Screens/add_degree.dart';
 import 'package:flutter_application_3/bottom_screens/first_screen.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text2.dart';
@@ -47,25 +48,25 @@ class Detail1 extends StatelessWidget {
                       const SizedBox(
                         height: defaultPading,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.person_outlined,
-                            color: primaryColor,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            controller.userModel.value.name!,
-                            style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Icon(
+                      //       Icons.person_outlined,
+                      //       color: primaryColor,
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     Text(
+                      //       "controller",
+                      //       style: TextStyle(
+                      //           color: Colors.grey.shade600,
+                      //           fontSize: 20,
+                      //           fontWeight: FontWeight.bold),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   )),
               const SizedBox(
@@ -81,9 +82,9 @@ class Detail1 extends StatelessWidget {
               ),
               DefaultCont(
                 iconData: Icons.assignment_outlined,
-                text: 'Assignments',
+                text: 'Degrees',
                 onPressed: () {
-                  Get.to(() => Assignments(),
+                  Get.to(() => const AddDegree(),
                       transition: Transition.leftToRight);
                 },
               ),

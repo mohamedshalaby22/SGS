@@ -76,10 +76,16 @@ class ContainerData extends StatelessWidget {
         decoration: decoration,
         child: Column(
           children: [
-            Image.asset(
-              image,
-              width: 150,
+            Container(
+              width: double.infinity,
               height: 150,
+              color: Colors.grey.shade100,
+              child: Image.asset(
+                image,
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.fill,
+              ),
             ),
             const SizedBox(
               height: defaultPading / 2,

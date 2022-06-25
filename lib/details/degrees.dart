@@ -64,16 +64,13 @@ class DegressPage extends StatelessWidget {
                             color: primaryColor,
                           ),
                           LocalSa(
-                            text: 'Quizes',
-                          ),
-                          LocalSa(
-                            text: 'Practical',
+                            text: 'Mid_term',
                           ),
                           LocalSa(
                             text: 'Oral',
                           ),
                           LocalSa(
-                            text: 'Mid-Term',
+                            text: 'Practical',
                           ),
                           LocalSa(
                             text: 'Total',
@@ -102,7 +99,6 @@ class DegressPage extends StatelessWidget {
                             size: 17,
                             color: primaryColor,
                           ),
-                          LocalSa(text: '20', color: Colors.grey.shade700),
                           LocalSa(text: '20', color: Colors.grey.shade700),
                           LocalSa(text: '20', color: Colors.grey.shade700),
                           LocalSa(text: '20', color: Colors.grey.shade700),
