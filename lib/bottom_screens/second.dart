@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/Screens/addquiez.dart';
 import 'package:flutter_application_3/Screens/quiez_page.dart';
 import 'package:flutter_application_3/Screens/student_assignment.dart';
 import 'package:flutter_application_3/components/default_button.dart';
@@ -27,7 +25,7 @@ class _SecondScreenState extends State<SecondScreen> {
       floatingActionButton: isDoctor
           ? FloatingActionButton(
               onPressed: () {
-                Get.to(() => AddQuiezNotes(), transition: Transition.zoom);
+                Get.to(() => const QuiezPage(), transition: Transition.zoom);
               },
               child: const Icon(Icons.drive_file_rename_outline))
           : null,

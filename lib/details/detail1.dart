@@ -6,8 +6,8 @@ import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/controller/auth.dart';
-import 'package:flutter_application_3/details/aaignments.dart';
 import 'package:flutter_application_3/details/attachments.dart';
+import 'package:flutter_application_3/details/degrees.dart';
 import 'package:flutter_application_3/details/posts.dart';
 import 'package:get/get.dart';
 
@@ -84,7 +84,7 @@ class Detail1 extends StatelessWidget {
                 iconData: Icons.assignment_outlined,
                 text: 'Degrees',
                 onPressed: () {
-                  Get.to(() => const AddDegree(),
+                  Get.to(() => const DegressPage(),
                       transition: Transition.leftToRight);
                 },
               ),
