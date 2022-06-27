@@ -14,9 +14,11 @@ class Data {
   String subjects;
   String doctorName;
   String image;
+  int id;
   Data({
     required this.subjects,
     required this.image,
+    required this.id,
     required this.doctorName,
   });
 }
@@ -31,33 +33,6 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   final img =
       'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80';
-  List<Data> items = [
-    Data(
-        subjects: 'Computer Graphics',
-        image:
-            'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80',
-        doctorName: 'Marawa Kashaba'),
-    Data(
-        subjects: 'Wireless and\nMobile NetWorks',
-        image:
-            'https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
-        doctorName: 'Ehab Rushdy'),
-    Data(
-        subjects: 'Virtual Reality',
-        image:
-            'https://images.unsplash.com/photo-1563372590-aa093423dcbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1622&q=80',
-        doctorName: 'Osama ElKomy'),
-    Data(
-        subjects: 'Selected Topics',
-        image:
-            'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-        doctorName: 'Walled Kheder '),
-    Data(
-        subjects: 'Computer Animation',
-        image:
-            'https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-        doctorName: 'Hanna Hamaza '),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +106,7 @@ class _FirstScreenState extends State<FirstScreen> {
                       }
                       final items = snapshot.data!
                           .map((e) => Data(
+                                id: e['id'],
                                 doctorName: '',
                                 image: img,
                                 subjects: e["subject_name"] ?? "",
@@ -149,7 +125,7 @@ class _FirstScreenState extends State<FirstScreen> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onLongPress: () {
-                                  deafultDialog(context);
+                                  deafultDialog(context, items[index].id);
                                 },
                                 onTap: () {
                                   Get.to(() => Detail1(items[index]),
@@ -217,7 +193,7 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  Future<dynamic> deafultDialog(BuildContext context) {
+  Future<dynamic> deafultDialog(BuildContext context, id) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -232,7 +208,10 @@ class _FirstScreenState extends State<FirstScreen> {
                 )),
             TextButton(
               style: TextButton.styleFrom(backgroundColor: Colors.redAccent),
-              onPressed: () => Navigator.pop(context, 'Delete Subject'),
+              onPressed: () async {
+                Get.back();
+                await Api.deleteSubject(id.toString(), showLoading: true);
+              },
               child: const Text(
                 'Delete Subject',
                 style: TextStyle(color: Colors.white),

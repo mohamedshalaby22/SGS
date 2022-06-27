@@ -1,12 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/constant/const.dart';
 
 class DegressPage extends StatelessWidget {
-  const DegressPage({Key? key}) : super(key: key);
+  const DegressPage(this.id, {Key? key}) : super(key: key);
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -14,104 +16,109 @@ class DegressPage extends StatelessWidget {
       appBar: AppBar(
         leading: const LeadingIcon(),
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: defaultPading),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Text1(
-                    text: 'Attachments',
-                    size: 20,
-                  ),
-                  Text1(
-                    text: ' - Degrees',
-                    size: 20,
-                    color: primaryColor,
-                  ),
-                ],
+              Text1(
+                text: 'Attachments',
+                size: 20,
               ),
-              const SizedBox(
-                height: defaultPading,
+              Text1(
+                text: ' - Degrees',
+                size: 20,
+                color: primaryColor,
               ),
-              Image.asset(
-                'assets/grades.jpg',
-                width: 200,
-                height: 200,
-              ),
-              const SizedBox(
-                height: defaultPading,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                          )),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text1(
-                            text: 'Degrees Title',
-                            size: 17,
-                            color: primaryColor,
-                          ),
-                          LocalSa(
-                            text: 'Mid_term',
-                          ),
-                          LocalSa(
-                            text: 'Oral',
-                          ),
-                          LocalSa(
-                            text: 'Practical',
-                          ),
-                          LocalSa(
-                            text: 'Total',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                          )),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text1(
-                            text: 'Degrees Value',
-                            size: 17,
-                            color: primaryColor,
-                          ),
-                          LocalSa(text: '20', color: Colors.grey.shade700),
-                          LocalSa(text: '20', color: Colors.grey.shade700),
-                          LocalSa(text: '20', color: Colors.grey.shade700),
-                          LocalSa(text: '80', color: Colors.grey.shade700),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
-        ),
+          const SizedBox(
+            height: defaultPading,
+          ),
+          Image.asset(
+            'assets/grades.jpg',
+            width: 200,
+            height: 200,
+          ),
+          const SizedBox(
+            height: defaultPading,
+          ),
+          FutureBuilder<List>(
+              future: Api.getHome(),
+              builder: (_, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  return const Center(child: Text('لا توجد بيانات'));
+                }
+                return Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            )),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text1(
+                              text: 'Degrees Title',
+                              size: 17,
+                              color: primaryColor,
+                            ),
+                            LocalSa(
+                              text: 'Mid_term',
+                            ),
+                            LocalSa(
+                              text: 'Oral',
+                            ),
+                            LocalSa(
+                              text: 'Practical',
+                            ),
+                            LocalSa(
+                              text: 'Total',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            )),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text1(
+                              text: 'Degrees Value',
+                              size: 17,
+                              color: primaryColor,
+                            ),
+                            LocalSa(text: '20', color: Colors.grey.shade700),
+                            LocalSa(text: '20', color: Colors.grey.shade700),
+                            LocalSa(text: '20', color: Colors.grey.shade700),
+                            LocalSa(text: '80', color: Colors.grey.shade700),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              })
+        ],
       ),
     );
   }

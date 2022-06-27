@@ -9,7 +9,8 @@ import 'package:flutter_application_3/details/degrees.dart';
 import 'package:get/get.dart';
 
 class Attachments extends StatelessWidget {
-  const Attachments({Key? key}) : super(key: key);
+  const Attachments(this.id, {Key? key}) : super(key: key);
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class Attachments extends StatelessWidget {
                 image: 'assets/grades.jpg',
                 text: 'Subjects Degress',
                 onPressed: () {
-                  Get.to(() => const DegressPage(),
+                  Get.to(() => DegressPage(id),
                       transition: Transition.leftToRight);
                 },
               ),

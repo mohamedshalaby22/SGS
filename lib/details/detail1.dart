@@ -1,11 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/Screens/add_degree.dart';
 import 'package:flutter_application_3/bottom_screens/first_screen.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
-import 'package:flutter_application_3/controller/auth.dart';
 import 'package:flutter_application_3/details/attachments.dart';
 import 'package:flutter_application_3/details/degrees.dart';
 import 'package:flutter_application_3/details/posts.dart';
@@ -19,7 +17,7 @@ class Detail1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    AuthController controller = Get.put(AuthController());
+    // AuthController controller = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(leading: const LeadingIcon()),
       body: Padding(
@@ -84,7 +82,7 @@ class Detail1 extends StatelessWidget {
                 iconData: Icons.assignment_outlined,
                 text: 'Degrees',
                 onPressed: () {
-                  Get.to(() => const DegressPage(),
+                  Get.to(() => DegressPage(data.id),
                       transition: Transition.leftToRight);
                 },
               ),
@@ -92,7 +90,7 @@ class Detail1 extends StatelessWidget {
                 iconData: Icons.menu_book_outlined,
                 text: 'Attachments',
                 onPressed: () {
-                  Get.to(() => const Attachments(),
+                  Get.to(() => Attachments(data.id),
                       transition: Transition.leftToRight);
                 },
               ),
