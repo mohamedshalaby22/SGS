@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   getDataAndRoute() {
-    Timer.periodic(const Duration(seconds: 2), (timer) async {
+    Timer.periodic(const Duration(seconds: 3), (timer) async {
       timer.cancel();
       if (isFirst) {
         return Get.offAll(() => const OnBoardingScrean());
@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     begin: 60,
                     end: size.width * 0.60,
                   ),
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(seconds: 3),
                   builder: (
                     BuildContext context,
                     dynamic value,

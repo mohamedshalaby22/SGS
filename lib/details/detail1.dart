@@ -78,14 +78,14 @@ class Detail1 extends StatelessWidget {
                       transition: Transition.leftToRight);
                 },
               ),
-              DefaultCont(
-                iconData: Icons.assignment_outlined,
-                text: 'Degrees',
-                onPressed: () {
-                  Get.to(() => DegressPage(data.id),
-                      transition: Transition.leftToRight);
-                },
-              ),
+              // DefaultCont(
+              //   iconData: Icons.assignment_outlined,
+              //   text: 'Degrees',
+              //   onPressed: () {
+              //     Get.to(() => DegressPage(data.id),
+              //         transition: Transition.leftToRight);
+              //   },
+              // ),
               DefaultCont(
                 iconData: Icons.menu_book_outlined,
                 text: 'Attachments',

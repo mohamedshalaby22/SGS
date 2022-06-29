@@ -79,7 +79,7 @@ class _FourthScreenState extends State<FourthScreen> {
                                         isScrollControlled: true,
                                         shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(25))),
+                                                top: Radius.circular(15))),
                                         context: (context),
                                         builder: (context) =>
                                             ModelSheetPicker(context));
@@ -156,61 +156,76 @@ class _FourthScreenState extends State<FourthScreen> {
     var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.only(top: defaultPading),
-      height: size.height * 0.2,
+      height: size.height * 0.3,
       width: size.width,
       child: Column(
         children: [
           Text1(
             text: 'Choose Profile Photo',
-            size: 15,
-            color: Colors.black,
+            size: 17,
+            color: Colors.black.withOpacity(0.60),
           ),
           const SizedBox(
             height: defaultPading,
           ),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
                 onTap: () {
                   takePhoto(ImageSource.gallery);
                 },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.image,
-                      color: primaryColor,
-                    ),
-                    const SizedBox(
-                      height: defaultPading / 2,
-                    ),
-                    Text1(
-                      text: 'Gallery',
-                      color: Colors.black,
-                      size: 15,
-                    )
-                  ],
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue.shade100,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Icon(
+                        Icons.image,
+                        color: Colors.black,
+                      ),
+                      Text1(
+                        text: 'Gallery',
+                        color: Colors.blue,
+                        size: 17,
+                      )
+                    ],
+                  ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               GestureDetector(
                 onTap: () {
                   takePhoto(ImageSource.camera);
                 },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.camera,
-                      color: primaryColor,
-                    ),
-                    const SizedBox(
-                      height: defaultPading / 2,
-                    ),
-                    Text1(
-                      text: 'Camera',
-                      color: Colors.black,
-                      size: 15,
-                    )
-                  ],
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue.shade100,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Icon(
+                        Icons.camera,
+                        color: Colors.black,
+                      ),
+                      Text1(
+                        text: 'Camera',
+                        color: Colors.blue,
+                        size: 17,
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

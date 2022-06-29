@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/add_subject.dart';
 import 'package:flutter_application_3/Services/api.dart';
+import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/detail1.dart';
 import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class Data {
   String subjects;
@@ -33,6 +35,10 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   final img =
       'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80';
+  Future<void> handel() async {
+    setState(() {});
+    await Future.delayed(const Duration(seconds: 2));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +108,16 @@ class _FirstScreenState extends State<FirstScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.hasData && snapshot.data!.isEmpty) {
-                        return const Center(child: Text('لا توجد بيانات'));
+                        return Center(
+                            child: Column(
+                          children: [
+                            Image.asset('assets/no data.gif'),
+                            Text1(
+                              text: 'No subjects found',
+                              color: Colors.grey.shade600,
+                            ),
+                          ],
+                        ));
                       }
                       final items = snapshot.data!
                           .map((e) => Data(
@@ -112,8 +127,13 @@ class _FirstScreenState extends State<FirstScreen> {
                                 subjects: e["subject_name"] ?? "",
                               ))
                           .toList();
-                      return RefreshIndicator(
-                        onRefresh: () async => setState(() {}),
+                      return LiquidPullToRefresh(
+                        height: 210,
+                        backgroundColor: Colors.lightBlue,
+                        color: Colors.white,
+                        animSpeedFactor: 2,
+                        showChildOpacityTransition: false,
+                        onRefresh: handel,
                         child: GridView.builder(
                             physics: const BouncingScrollPhysics(),
                             itemCount: items.length,
@@ -131,8 +151,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   Get.to(() => Detail1(items[index]),
                                       transition: Transition.leftToRight);
                                 },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 400),
+                                child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.grey.shade50,
@@ -173,11 +192,15 @@ class _FirstScreenState extends State<FirstScreen> {
                                         height: defaultPading,
                                       ),
                                       Expanded(
-                                        child: Text(
-                                          items[index].subjects,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 7, right: 7, bottom: 7),
+                                          child: Text(
+                                            items[index].subjects,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
                                     ],
