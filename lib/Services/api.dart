@@ -223,8 +223,25 @@ class Api {
     return [];
   }
 
+  static Future<List> getPosts(String subjectId) async {
+    try {
+      final response = await get(
+          Uri.parse(_baseUrl + "/api/doctor/show-post-subject/$subjectId"),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        return parsed['data'];
+      } else {
+        Alerts.showSnackBar(msg: parsed['message']);
+      }
+    } catch (e) {
+      Alerts.showSnackBar();
+    }
+    return [];
+  }
+
   static Future<Map> addPost(
-      File? image, String title, String body, String subjectId,
+      File? image, String title, String body, String subjectId, String postId,
       {bool showLoading = false, bool update = false}) async {
     try {
       if (showLoading) Alerts.showLoading();
@@ -233,7 +250,7 @@ class Api {
         "POST",
         Uri.parse(
           _baseUrl +
-              '/api/doctor/${update ? "update-post" : "insert-post"}?title=$title&body=$body&subject_id=$subjectId',
+              '/api/doctor/${update ? "update-post/$postId" : "insert-post"}?title=$title&body=$body&subject_id=$subjectId',
         ),
       );
       if (image != null) {
@@ -248,11 +265,13 @@ class Api {
       final parsed = jsonDecode(response.body);
 
       if (showLoading) Get.back();
+      print(parsed);
       if (response.statusCode == 200 && parsed['status'] == 200) {
         Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];
+      } else {
+        Alerts.showSnackBar(msg: parsed['message']);
       }
-      Alerts.showSnackBar(msg: parsed['message']);
     } catch (e) {
       if (showLoading) Get.back();
       Alerts.showSnackBar();
@@ -261,13 +280,14 @@ class Api {
   }
 
   static Future<Map> updatePost(
-    File image,
+    File? image,
     String title,
     String body,
-    String subjectId, {
+    String subjectId,
+    String postId, {
     bool showLoading = false,
   }) async {
-    return await addPost(image, title, body, subjectId,
+    return await addPost(image, title, body, subjectId, postId,
         showLoading: showLoading, update: true);
   }
 
@@ -283,9 +303,9 @@ class Api {
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
         Alerts.showSnackBar(msg: parsed['message'], isError: false);
-        return parsed['data'];
+      } else {
+        Alerts.showSnackBar(msg: parsed['message']);
       }
-      Alerts.showSnackBar(msg: parsed['message']);
     } catch (e) {
       if (showLoading) Get.back();
       Alerts.showSnackBar();

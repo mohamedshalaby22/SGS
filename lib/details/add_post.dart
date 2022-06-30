@@ -1,6 +1,7 @@
-import 'dart:developer';
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/formfield.dart';
 import 'package:flutter_application_3/constant/const.dart';
@@ -10,17 +11,27 @@ import 'package:open_file/open_file.dart';
 import '../components/text1.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
-
+  const AddPostScreen(this.id, {this.post = const {}, Key? key})
+      : super(key: key);
+  final String id;
+  final Map post;
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
   var title = TextEditingController();
-
+  File? image;
+  String url = '';
   var formKey = GlobalKey<FormState>();
   AuthController controller = Get.put(AuthController());
+  @override
+  void initState() {
+    if (widget.post.isNotEmpty) {
+      title.text = widget.post['body'];
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +55,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Add New Post',
+                          widget.post.isNotEmpty
+                              ? "Update Post"
+                              : 'Add New Post',
                           style: TextStyle(
                               color: primaryColor,
                               fontSize: 30,
@@ -116,9 +129,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     if (result == null) {
                       return;
                     }
-                    final file = result.files.first;
-                    openFile(file);
-                    log(file.name);
+                    image = File(result.files.first.path!);
+                    setState(() {});
                   },
                   child: Container(
                     width: double.infinity,
@@ -144,6 +156,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ),
                 ),
+                if (image != null)
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    width: double.infinity,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                            fit: BoxFit.fill, image: FileImage(image!))),
+                  )
               ],
             ),
           ),
@@ -152,10 +174,27 @@ class _AddPostScreenState extends State<AddPostScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: DefaultButton(
-            text: 'Add Post',
-            onPressed: () {
+            text: widget.post.isNotEmpty ? "Update Post" : 'Add Post',
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                // Api.addPost(image, '', body, subjectId)
+                if (widget.post.isNotEmpty) {
+                  await Api.updatePost(image, '', title.text.trim(), widget.id,
+                          widget.post['id'].toString(),
+                          showLoading: true)
+                      .then((value) {
+                    title.clear();
+                    image = null;
+                    setState(() {});
+                  });
+                } else {
+                  await Api.addPost(image, '', title.text.trim(), widget.id, '',
+                          showLoading: true)
+                      .then((value) {
+                    title.clear();
+                    image = null;
+                    setState(() {});
+                  });
+                }
               }
             }),
       ),

@@ -74,7 +74,7 @@ class Detail1 extends StatelessWidget {
                 iconData: Icons.post_add_outlined,
                 text: 'Posts',
                 onPressed: () {
-                  Get.to(() => const Posts(),
+                  Get.to(() => Posts(data.id.toString()),
                       transition: Transition.leftToRight);
                 },
               ),
