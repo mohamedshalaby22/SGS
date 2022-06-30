@@ -9,7 +9,7 @@ class BottomNavBar extends GetxController {
   List<Widget> screens = [
     const FirstScreen(),
     const SecondScreen(),
-    const ThirdScreen(),
+    ThirdScreen(),
     const FourthScreen(),
   ];
   List<BottomNavigationBarItem> bottomItem = [
@@ -18,7 +18,7 @@ class BottomNavBar extends GetxController {
     const BottomNavigationBarItem(
         icon: Icon(Icons.school_outlined), label: 'Quizzes'),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.maps_ugc_outlined), label: 'Message'),
+        icon: Icon(Icons.maps_ugc_outlined), label: 'Chats'),
     const BottomNavigationBarItem(
         icon: Icon(Icons.person_outlined), label: 'Profile'),
   ];
