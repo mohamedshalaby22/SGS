@@ -75,7 +75,7 @@ class ThirdScreen extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: BottomChatbar(),
+      bottomNavigationBar: const BottomChatbar(),
     );
   }
 }

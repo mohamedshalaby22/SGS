@@ -18,7 +18,7 @@ class _OnBoardingScreanState extends State<OnBoardingScrean> {
   List splashData = [
     {
       "text":
-          "Welcome to DAS, It's Our App!\nYou are always assured of a pleasant welcome.",
+          "Welcome to Our App, It's Our App!\nYou are always assured of a pleasant welcome.",
       "image": "assets/b1.png"
     },
     {

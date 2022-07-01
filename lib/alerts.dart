@@ -22,8 +22,8 @@ class Alerts {
   }
 
   static showSnackBar({String? msg, bool isError = true}) {
-    print(msg);
-    print(isError);
+    // print(msg);
+    // print(isError);
     if (isError) {
       msg = msg ?? 'SomeThing went wrong ,please try again later.';
     }

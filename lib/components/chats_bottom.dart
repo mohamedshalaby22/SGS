@@ -1,12 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/bottom_screens/home_layout.dart';
-import 'package:flutter_application_3/bottom_screens/third.dart';
-import 'package:get/get.dart';
 
 class BottomChatbar extends StatefulWidget {
-  BottomChatbar({
+  const BottomChatbar({
     Key? key,
   }) : super(key: key);
 
@@ -64,7 +61,10 @@ class _BottomChatbarState extends State<BottomChatbar> {
             Padding(
               padding: const EdgeInsets.only(right: 7),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  messageController.text;
+                  messageController.clear();
+                },
                 child: CircleAvatar(
                   radius: 22,
                   backgroundColor: Colors.blue.shade400,
