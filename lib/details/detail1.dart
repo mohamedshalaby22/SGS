@@ -1,6 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/bottom_screens/first_screen.dart';
+import 'package:flutter_application_3/bottom_screens/subjects.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
