@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/add_post.dart';
 import 'package:get/get.dart';
 
 class Posts extends StatefulWidget {
-  const Posts({Key? key}) : super(key: key);
-
+  const Posts(this.id, {Key? key}) : super(key: key);
+  final String id;
   @override
   State<Posts> createState() => _PostsState();
 }
@@ -18,41 +18,38 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: isVisible
-          ? FloatingActionButton.extended(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                Get.to(() => const AddPostScreen(),
-                    transition: Transition.zoom);
-              },
-              label: const Text('Add Post'))
-          : null,
-      appBar: AppBar(
-        leading: const LeadingIcon(),
-      ),
-      body: NotificationListener<UserScrollNotification>(
-        onNotification: (notification) {
-          if (notification.direction == ScrollDirection.forward) {
-            if (!isVisible) {
-              setState(() {
-                isVisible = true;
-              });
-            }
-          } else if (notification.direction == ScrollDirection.reverse) {
-            if (isVisible) {
-              setState(() {
-                isVisible = false;
-              });
-            }
-          }
-          return true;
-        },
-        child: ListView.builder(
-          itemBuilder: ((context, index) => const DefPosts()),
-          itemCount: 3,
+        floatingActionButton: isVisible
+            ? FloatingActionButton.extended(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  Get.to(() => AddPostScreen(widget.id),
+                      transition: Transition.zoom);
+                },
+                label: const Text('Add Post'))
+            : null,
+        appBar: AppBar(
+          leading: const LeadingIcon(),
         ),
-      ),
-    );
+        body: FutureBuilder<List>(
+            future: Api.getPosts(widget.id),
+            builder: (_, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasData && snapshot.data!.isEmpty) {
+                return const Center(child: Text('لا توجد بيانات'));
+              }
+
+              final posts = snapshot.data ?? [];
+              return RefreshIndicator(
+                  onRefresh: () async => setState(() {}),
+                  child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        return DefPosts(posts[index]);
+                      }));
+            }));
   }
 }
 
@@ -60,38 +57,45 @@ class _PostsState extends State<Posts> {
 enum _MenuValue { update, delete }
 
 class DefPosts extends StatelessWidget {
-  const DefPosts({
+  const DefPosts(
+    this.post, {
     Key? key,
   }) : super(key: key);
+  final Map post;
+
+  void cheackOnDeleted(context) {
+    final snackbar = SnackBar(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      content: const Text(
+        'Post Deleted Successfully!',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+//{id: 2, title: null, body: First Post, file: posts/1656630190images.jpeg, time: 2022-07-01 01:03:10, subject: {id: 44, subject_name: System Analysis}, doctor: {id: 1, name: Doctor 1, email: doctor1@gmail.com, photo: null}}
 
   @override
   Widget build(BuildContext context) {
-    void cheackOnDeleted() {
-      final snackbar = SnackBar(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.all(20),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        content: const Text(
-          'Post Deleted Successfully!',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    }
-
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
           ListTile(
-              leading: const CircleAvatar(
-                  radius: 20, backgroundImage: AssetImage('assets/p1.png')),
-              title: const Text(
-                'Dr:Marawa Kashaba',
-                style: TextStyle(color: Colors.black),
+              leading: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: ((post['doctor']['image'] != null
+                      ? NetworkImage(post['doctor']['image'])
+                      : const AssetImage('assets/p1.png')) as ImageProvider)),
+              title: Text(
+                post['doctor']['name'],
+                style: const TextStyle(color: Colors.black),
               ),
               trailing: PopupMenuButton<_MenuValue>(
                 shape: RoundedRectangleBorder(
@@ -108,14 +112,19 @@ class DefPosts extends StatelessWidget {
                     value: _MenuValue.delete,
                   ),
                 ],
-                onSelected: (value) {
+                onSelected: (value) async {
                   switch (value) {
                     case _MenuValue.update:
-                      Get.to(() => const AddPostScreen(),
+                      await Get.to(
+                          () => AddPostScreen(
+                                post['subject']['id'].toString(),
+                                post: post,
+                              ),
                           transition: Transition.leftToRight);
                       break;
                     case _MenuValue.delete:
-                      cheackOnDeleted();
+                      await Api.deletePost(post['id'].toString(),
+                          showLoading: true);
                       break;
                   }
                 },
@@ -131,21 +140,26 @@ class DefPosts extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'غدا ان شاء الله بعد المحاضره الاولي كل التيمات تيجي عندي المكتب بالدور عشان نبدا نشوف مشاريع التخرج بالتوفيق',
+                Text(
+                  post['body'],
                   textAlign: TextAlign.right,
-                  style:
-                      TextStyle(fontSize: 18, color: Colors.black, height: 1.5),
+                  style: const TextStyle(
+                      fontSize: 18, color: Colors.black, height: 1.5),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: defaultPading, bottom: defaultPading),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset('assets/re.png',
-                        fit: BoxFit.cover, width: double.infinity, height: 200),
-                  ),
-                ),
+                (post['file'] != null &&
+                        post['file'].toString().contains("https"))
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            top: defaultPading, bottom: defaultPading),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(post['file'],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 200),
+                        ),
+                      )
+                    : const SizedBox(height: 50),
                 Text('0 Comment',
                     style: TextStyle(color: Colors.grey.shade500)),
                 const Padding(
