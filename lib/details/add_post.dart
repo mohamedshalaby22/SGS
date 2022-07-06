@@ -33,6 +33,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     super.initState();
   }
 
+  final img =
+      'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80';
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;

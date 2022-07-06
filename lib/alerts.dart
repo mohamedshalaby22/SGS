@@ -22,11 +22,11 @@ class Alerts {
   }
 
   static showSnackBar({String? msg, bool isError = true}) {
-<<<<<<< HEAD
-    // print(msg);
-    // print(isError);
-=======
->>>>>>> ef3ebb0f2870e8b3d816f6582cbcbecb1b75e211
+// <<<<<<< HEAD
+//     // print(msg);
+//     // print(isError);
+// =======
+// >>>>>>> ef3ebb0f2870e8b3d816f6582cbcbecb1b75e211
     if (isError) {
       msg = msg ?? 'SomeThing went wrong ,please try again later.';
     }

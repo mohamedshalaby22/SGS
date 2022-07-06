@@ -249,7 +249,10 @@ class Api {
   static Future<List> getPosts(String subjectId) async {
     try {
       final response = await get(
-          Uri.parse(_baseUrl + "/api/doctor/show-post-subject/$subjectId"),
+          Uri.parse(_baseUrl +
+              (isDoctor
+                  ? "/api/doctor/show-post-subject/$subjectId"
+                  : "/api/student/show-post-subject/$subjectId")),
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
       if (response.statusCode == 200 && parsed['status'] == 200) {
@@ -288,7 +291,7 @@ class Api {
       final parsed = jsonDecode(response.body);
 
       if (showLoading) Get.back();
-      print(parsed);
+
       if (response.statusCode == 200 && parsed['status'] == 200) {
         Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];

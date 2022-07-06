@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
+import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/add_post.dart';
+import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class Posts extends StatefulWidget {
   const Posts(this.id, {Key? key}) : super(key: key);
@@ -13,12 +16,15 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
-  bool isVisible = true;
+  Future<void> _handel() async {
+    setState(() {});
+    await Future.delayed(const Duration(seconds: 2));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: isVisible
+        floatingActionButton: isDoctor
             ? FloatingActionButton.extended(
                 icon: const Icon(Icons.add),
                 onPressed: () {
@@ -37,12 +43,26 @@ class _PostsState extends State<Posts> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasData && snapshot.data!.isEmpty) {
-                return const Center(child: Text('لا توجد بيانات'));
+                return Center(
+                    child: Column(
+                  children: [
+                    Image.asset('assets/no data.gif'),
+                    Text1(
+                      text: 'No posts found',
+                      color: Colors.grey.shade600,
+                    ),
+                  ],
+                ));
               }
 
               final posts = snapshot.data ?? [];
-              return RefreshIndicator(
-                  onRefresh: () async => setState(() {}),
+              return LiquidPullToRefresh(
+                  height: 210,
+                  backgroundColor: Colors.lightBlue,
+                  color: Colors.white,
+                  animSpeedFactor: 2,
+                  showChildOpacityTransition: false,
+                  onRefresh: _handel,
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: posts.length,
@@ -78,8 +98,6 @@ class DefPosts extends StatelessWidget {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
-
-//{id: 2, title: null, body: First Post, file: posts/1656630190images.jpeg, time: 2022-07-01 01:03:10, subject: {id: 44, subject_name: System Analysis}, doctor: {id: 1, name: Doctor 1, email: doctor1@gmail.com, photo: null}}
 
   @override
   Widget build(BuildContext context) {
@@ -142,9 +160,12 @@ class DefPosts extends StatelessWidget {
               children: [
                 Text(
                   post['body'],
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                      fontSize: 18, color: Colors.black, height: 1.5),
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey.shade700,
+                      height: 1.5),
                 ),
                 (post['file'] != null &&
                         post['file'].toString().contains("https"))

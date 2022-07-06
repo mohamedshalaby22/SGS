@@ -122,6 +122,8 @@ class _SignInState extends State<SignIn> {
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'password musn\'t be empty';
+                          } else if (value.length < 8) {
+                            return 'password musnt be 8 numbers';
                           }
                           return null;
                         },

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_3/Screens/splash.dart';
@@ -10,7 +11,7 @@ bool isDoctor = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   isFirst = await SharedPrefrencesStorage.getIsFirst();
   runApp(const MyApp());
 }

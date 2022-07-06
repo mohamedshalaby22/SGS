@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/bottom_screens/first_screen.dart';
-import 'package:flutter_application_3/bottom_screens/fourth.dart';
-import 'package:flutter_application_3/bottom_screens/second.dart';
-import 'package:flutter_application_3/bottom_screens/third.dart';
+import 'package:flutter_application_3/bottom_screens/chats.dart';
+import 'package:flutter_application_3/bottom_screens/profile.dart';
+import 'package:flutter_application_3/bottom_screens/quizes.dart';
+import 'package:flutter_application_3/bottom_screens/subjects.dart';
 import 'package:get/get.dart';
 
 class BottomNavBar extends GetxController {
