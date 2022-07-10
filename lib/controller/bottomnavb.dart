@@ -9,7 +9,7 @@ class BottomNavBar extends GetxController {
   List<Widget> screens = [
     const FirstScreen(),
     const SecondScreen(),
-    ThirdScreen(),
+    const ThirdScreen(),
     const FourthScreen(),
   ];
   List<BottomNavigationBarItem> bottomItem = [

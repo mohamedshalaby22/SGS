@@ -5,6 +5,7 @@ import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
+import 'package:flutter_application_3/details/attendance.dart';
 import 'package:flutter_application_3/details/degrees.dart';
 import 'package:get/get.dart';
 
@@ -30,11 +31,6 @@ class Attachments extends StatelessWidget {
                 height: defaultPading,
               ),
               ContainerData(
-                image: 'assets/videos.png',
-                text: 'Videos lecture',
-                onPressed: () {},
-              ),
-              ContainerData(
                 image: 'assets/grades.jpg',
                 text: 'Subjects Degress',
                 onPressed: () {
@@ -44,8 +40,11 @@ class Attachments extends StatelessWidget {
               ),
               ContainerData(
                 image: 'assets/files.png',
-                text: 'lecture Files',
-                onPressed: () {},
+                text: 'Attendance',
+                onPressed: () {
+                  Get.to(() => const AttendancePage(),
+                      transition: Transition.leftToRight);
+                },
               ),
             ],
           ),

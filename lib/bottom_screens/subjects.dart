@@ -58,34 +58,13 @@ class _FirstScreenState extends State<FirstScreen> {
           style: TextStyle(
               color: primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                  color: Colors.white,
-                  iconSize: 25,
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.notifications,
-                    color: primaryColor,
-                  )),
-              const Positioned(
-                right: 7,
-                top: 6,
-                child: CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Colors.pink,
-                  child: Text(
-                    '3',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: defaultPading / 2),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/s.jpeg'),
+            ),
+          )
         ],
       ),
       body: Padding(

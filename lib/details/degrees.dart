@@ -19,18 +19,10 @@ class DegressPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: defaultPading),
         children: [
-          Row(
-            children: [
-              Text1(
-                text: 'Attachments',
-                size: 20,
-              ),
-              Text1(
-                text: ' - Degrees',
-                size: 20,
-                color: primaryColor,
-              ),
-            ],
+          Text1(
+            text: 'Degrees',
+            size: 25,
+            color: primaryColor,
           ),
           const SizedBox(
             height: defaultPading,
