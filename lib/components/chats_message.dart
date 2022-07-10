@@ -7,11 +7,13 @@ import 'package:flutter_application_3/constant/const.dart';
 class ChatsMessage extends StatelessWidget {
   ChatsMessage({
     Key? key,
+    required this.time,
     required this.isSended,
     required this.text,
   }) : super(key: key);
   bool isSended;
   String text;
+  String time;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,7 +55,7 @@ class ChatsMessage extends StatelessWidget {
             height: 4,
           ),
           Text1(
-            text: "4:35 pm",
+            text: time,
             size: 12,
           )
         ],

@@ -1,6 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Models/chat_model.dart';
+import 'package:flutter_application_3/Models/user_model.dart';
+import 'package:flutter_application_3/Services/chat_service.dart';
+
+import '../Services/sharedprefrences.dart';
 
 class BottomChatbar extends StatefulWidget {
   const BottomChatbar({
@@ -61,8 +66,23 @@ class _BottomChatbarState extends State<BottomChatbar> {
             Padding(
               padding: const EdgeInsets.only(right: 7),
               child: GestureDetector(
-                onTap: () {
-                  messageController.text;
+                onTap: () async {
+                  UserModel? user =
+                      await SharedPrefrencesStorage.getSavedUser();
+                  String time = TimeOfDay.fromDateTime(DateTime.now())
+                      .format(context)
+                      .toString();
+                  String date = DateTime.now().toString();
+
+                  ChatService.instance.createModelInDb(
+                      date.toString(),
+                      Chat(
+                          user: user!.email,
+                          msg: messageController.text,
+                          time: time,
+                          name: user.name),
+                      ChatService.chatCollection);
+
                   messageController.clear();
                 },
                 child: CircleAvatar(
