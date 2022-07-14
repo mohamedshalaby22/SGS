@@ -10,7 +10,8 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String _baseUrl = 'https://radiant-falls-92419.herokuapp.com';
+  static const String _baseUrl =
+      'https://abracadabrant-baguette-01863.herokuapp.com';
 
   static Future<Map<String, String>> _getHeaders() async {
     final token = await SharedPrefrencesStorage.getSavedToken();
