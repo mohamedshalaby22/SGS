@@ -10,7 +10,8 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String _baseUrl = 'https://radiant-falls-92419.herokuapp.com';
+  static const String _baseUrl =
+      'https://abracadabrant-baguette-01863.herokuapp.com';
 
   static Future<Map<String, String>> _getHeaders() async {
     final token = await SharedPrefrencesStorage.getSavedToken();
@@ -469,6 +470,32 @@ class Api {
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
+        return parsed['data'];
+      }
+      Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      if (showLoading) Get.back();
+      Alerts.showSnackBar();
+    }
+    return {};
+  }
+
+  static Future<Map> addComment(
+    String postId,
+    String comment, {
+    bool showLoading = false,
+  }) async {
+    try {
+      if (showLoading) Alerts.showLoading();
+      final response = await post(
+          Uri.parse(_baseUrl +
+              '/api/student/insert-comment?comment=$comment&post_id=$postId'),
+          encoding: Encoding.getByName('utf-8'),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (showLoading) Get.back();
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
         return parsed['data'];
       }
       Alerts.showSnackBar(msg: parsed['message']);
