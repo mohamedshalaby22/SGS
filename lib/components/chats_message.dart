@@ -23,6 +23,9 @@ class ChatsMessage extends StatelessWidget {
             isSended ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
+            constraints: const BoxConstraints(
+              maxWidth: 250,
+            ),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 gradient: isSended

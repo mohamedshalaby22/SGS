@@ -479,6 +479,32 @@ class Api {
     return {};
   }
 
+  static Future<Map> addComment(
+    String postId,
+    String comment, {
+    bool showLoading = false,
+  }) async {
+    try {
+      if (showLoading) Alerts.showLoading();
+      final response = await post(
+          Uri.parse(_baseUrl +
+              '/api/student/insert-comment?comment=$comment&post_id=$postId'),
+          encoding: Encoding.getByName('utf-8'),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (showLoading) Get.back();
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        Alerts.showSnackBar(msg: parsed['message'], isError: false);
+        return parsed['data'];
+      }
+      Alerts.showSnackBar(msg: parsed['message']);
+    } catch (e) {
+      if (showLoading) Get.back();
+      Alerts.showSnackBar();
+    }
+    return {};
+  }
+
   // static Future<Map> updateQuizStatus(
   //   String status, {
   //   bool showLoading = false,

@@ -22,7 +22,7 @@ class _BottomChatbarState extends State<BottomChatbar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
       child: BottomAppBar(
         color: Colors.white,
         elevation: 0.0,
@@ -54,10 +54,6 @@ class _BottomChatbarState extends State<BottomChatbar> {
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: 'Type message'),
                       ),
-                    ),
-                    Icon(
-                      Icons.attach_file_outlined,
-                      color: Colors.grey.shade600,
                     ),
                   ],
                 ),
