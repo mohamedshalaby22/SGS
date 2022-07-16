@@ -192,6 +192,7 @@ class Api {
 
       final responseStream = await request.send();
       final response = await http.Response.fromStream(responseStream);
+
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
       bool isSuccess = response.statusCode == 200;
@@ -253,6 +254,24 @@ class Api {
               (isDoctor
                   ? "/api/doctor/show-post-subject/$subjectId"
                   : "/api/student/show-post-subject/$subjectId")),
+          headers: await _getHeaders());
+      final parsed = jsonDecode(response.body);
+      if (response.statusCode == 200 && parsed['status'] == 200) {
+        return parsed['data'];
+      } else {
+        Alerts.showSnackBar(msg: parsed['message']);
+      }
+    } catch (e) {
+      Alerts.showSnackBar();
+    }
+    return [];
+  }
+
+  static Future<List> getComments(String postId) async {
+    try {
+      final response = await get(
+          Uri.parse(_baseUrl +
+              "/api/${isDoctor ? 'doctor' : 'student'}/show-comments/$postId"),
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
       if (response.statusCode == 200 && parsed['status'] == 200) {
@@ -339,80 +358,22 @@ class Api {
     return {};
   }
 
-//Subjects name ,Subject Duration
-  static Future<Map> addQuiz(
-    String subjectId,
-    String pointsNumber,
-    String notes,
-    String totalDegree,
-    String duration, {
-    bool showLoading = false,
-  }) async {
-    try {
-      if (showLoading) Alerts.showLoading();
-      final response = await post(
-          Uri.parse(_baseUrl +
-              '/api/doctor/insert-quiz?subject_id=$subjectId&pointsNumber=$pointsNumber&notes=$notes&totalDegree=$totalDegree&duration=$duration'),
-          encoding: Encoding.getByName('utf-8'),
-          headers: await _getHeaders());
-      final parsed = jsonDecode(response.body);
-      if (showLoading) Get.back();
-      if (response.statusCode == 200 && parsed['status'] == 200) {
-        Alerts.showSnackBar(msg: parsed['message'], isError: false);
-        return parsed['data'];
-      }
-      Alerts.showSnackBar(msg: parsed['message']);
-    } catch (e) {
-      if (showLoading) Get.back();
-      Alerts.showSnackBar();
-    }
-    return {};
-  }
-
-  static Future<Map> updateQuiz(
-    String subjectId,
-    String pointsNumber,
-    String notes,
-    String totalDegree,
-    String duration, {
-    bool showLoading = false,
-  }) async {
-    try {
-      if (showLoading) Alerts.showLoading();
-      final response = await put(
-          Uri.parse(_baseUrl +
-              '/api/doctor/insert-quiz?subject_id=$subjectId&pointsNumber=$pointsNumber&notes=$notes&totalDegree=$totalDegree&duration=$duration'),
-          encoding: Encoding.getByName('utf-8'),
-          headers: await _getHeaders());
-      final parsed = jsonDecode(response.body);
-      if (showLoading) Get.back();
-      if (response.statusCode == 200 && parsed['status'] == 200) {
-        Alerts.showSnackBar(msg: parsed['message'], isError: false);
-        return parsed['data'];
-      }
-      Alerts.showSnackBar(msg: parsed['message']);
-    } catch (e) {
-      if (showLoading) Get.back();
-      Alerts.showSnackBar();
-    }
-    return {};
-  }
-
-  static Future<Map> deleteQuiz(String quizId,
+  static Future<Map> deleteCmment(String commentId,
       {bool showLoading = false}) async {
     try {
       if (showLoading) Alerts.showLoading();
       final response = await delete(
-          Uri.parse(_baseUrl + '/api/doctor/delete-quiz/$quizId'),
+          Uri.parse(_baseUrl +
+              '/api/${isDoctor ? 'doctor' : 'student'}/delete-comment/$commentId'),
           encoding: Encoding.getByName('utf-8'),
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
       if (showLoading) Get.back();
       if (response.statusCode == 200 && parsed['status'] == 200) {
         Alerts.showSnackBar(msg: parsed['message'], isError: false);
-        return parsed['data'];
+      } else {
+        Alerts.showSnackBar(msg: parsed['message']);
       }
-      Alerts.showSnackBar(msg: parsed['message']);
     } catch (e) {
       if (showLoading) Get.back();
       Alerts.showSnackBar();
@@ -420,64 +381,8 @@ class Api {
     return {};
   }
 
-  static Future<Map> getQuizbysubjectId(String subjectId,
-      {bool showLoading = false}) async {
-    try {
-      if (showLoading) Alerts.showLoading();
-      final response = await get(
-          Uri.parse(_baseUrl + '/api/doctor/subject-quizes/$subjectId'),
-          headers: await _getHeaders());
-      final parsed = jsonDecode(response.body);
-      if (showLoading) Get.back();
-      if (response.statusCode == 200 && parsed['status'] == 200) {
-        return parsed['data'];
-      }
-      Alerts.showSnackBar(msg: parsed['message']);
-    } catch (e) {
-      if (showLoading) Get.back();
-      Alerts.showSnackBar();
-    }
-    return {};
-  }
-
-  static Future<Map> getQuizbyId(String id, {bool showLoading = false}) async {
-    try {
-      if (showLoading) Alerts.showLoading();
-      final response = await get(
-          Uri.parse(_baseUrl + '/api/doctor/show-quize/$id'),
-          headers: await _getHeaders());
-      final parsed = jsonDecode(response.body);
-      if (showLoading) Get.back();
-      if (response.statusCode == 200 && parsed['status'] == 200) {
-        return parsed['data'];
-      }
-      Alerts.showSnackBar(msg: parsed['message']);
-    } catch (e) {
-      if (showLoading) Get.back();
-      Alerts.showSnackBar();
-    }
-    return {};
-  }
-
-  static Future<Map> getQuizbDegreeyId(String id,
-      {bool showLoading = false}) async {
-    try {
-      if (showLoading) Alerts.showLoading();
-      final response = await get(
-          Uri.parse(_baseUrl + '/api/doctor/quize-degrees/$id'),
-          headers: await _getHeaders());
-      final parsed = jsonDecode(response.body);
-      if (showLoading) Get.back();
-      if (response.statusCode == 200 && parsed['status'] == 200) {
-        return parsed['data'];
-      }
-      Alerts.showSnackBar(msg: parsed['message']);
-    } catch (e) {
-      if (showLoading) Get.back();
-      Alerts.showSnackBar();
-    }
-    return {};
-  }
+//Subjects name ,Subject Duration
+  //
 
   static Future<Map> addComment(
     String postId,
@@ -488,7 +393,7 @@ class Api {
       if (showLoading) Alerts.showLoading();
       final response = await post(
           Uri.parse(_baseUrl +
-              '/api/student/insert-comment?comment=$comment&post_id=$postId'),
+              '/api/${isDoctor ? 'doctor' : 'student'}/insert-comment?comment=$comment&post_id=$postId'),
           encoding: Encoding.getByName('utf-8'),
           headers: await _getHeaders());
       final parsed = jsonDecode(response.body);
@@ -504,6 +409,144 @@ class Api {
     }
     return {};
   }
+  // static Future<Map> addQuiz(
+  //   String subjectId,
+  //   String pointsNumber,
+  //   String notes,
+  //   String totalDegree,
+  //   String duration, {
+  //   bool showLoading = false,
+  // }) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await post(
+  //         Uri.parse(_baseUrl +
+  //             '/api/doctor/insert-quiz?subject_id=$subjectId&pointsNumber=$pointsNumber&notes=$notes&totalDegree=$totalDegree&duration=$duration'),
+  //         encoding: Encoding.getByName('utf-8'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       Alerts.showSnackBar(msg: parsed['message'], isError: false);
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
+
+  // static Future<Map> updateQuiz(
+  //   String subjectId,
+  //   String pointsNumber,
+  //   String notes,
+  //   String totalDegree,
+  //   String duration, {
+  //   bool showLoading = false,
+  // }) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await put(
+  //         Uri.parse(_baseUrl +
+  //             '/api/doctor/insert-quiz?subject_id=$subjectId&pointsNumber=$pointsNumber&notes=$notes&totalDegree=$totalDegree&duration=$duration'),
+  //         encoding: Encoding.getByName('utf-8'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       Alerts.showSnackBar(msg: parsed['message'], isError: false);
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
+
+  // static Future<Map> deleteQuiz(String quizId,
+  //     {bool showLoading = false}) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await delete(
+  //         Uri.parse(_baseUrl + '/api/doctor/delete-quiz/$quizId'),
+  //         encoding: Encoding.getByName('utf-8'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       Alerts.showSnackBar(msg: parsed['message'], isError: false);
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
+
+  // static Future<Map> getQuizbysubjectId(String subjectId,
+  //     {bool showLoading = false}) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await get(
+  //         Uri.parse(_baseUrl + '/api/doctor/subject-quizes/$subjectId'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
+
+  // static Future<Map> getQuizbyId(String id, {bool showLoading = false}) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await get(
+  //         Uri.parse(_baseUrl + '/api/doctor/show-quize/$id'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
+
+  // static Future<Map> getQuizbDegreeyId(String id,
+  //     {bool showLoading = false}) async {
+  //   try {
+  //     if (showLoading) Alerts.showLoading();
+  //     final response = await get(
+  //         Uri.parse(_baseUrl + '/api/doctor/quize-degrees/$id'),
+  //         headers: await _getHeaders());
+  //     final parsed = jsonDecode(response.body);
+  //     if (showLoading) Get.back();
+  //     if (response.statusCode == 200 && parsed['status'] == 200) {
+  //       return parsed['data'];
+  //     }
+  //     Alerts.showSnackBar(msg: parsed['message']);
+  //   } catch (e) {
+  //     if (showLoading) Get.back();
+  //     Alerts.showSnackBar();
+  //   }
+  //   return {};
+  // }
 
   // static Future<Map> updateQuizStatus(
   //   String status, {

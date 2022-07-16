@@ -25,7 +25,7 @@ class _GroupsState extends State<Groups> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => const ThirdScreen(), transition: Transition.leftToRight);
+          Get.to(() => const ThirdScreen(), transition: Transition.native);
         },
         child: SafeArea(
           child: Padding(

@@ -17,8 +17,8 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   Future<void> _handel() async {
-    setState(() {});
     await Future.delayed(const Duration(seconds: 2));
+    setState(() {});
   }
 
   @override
@@ -64,7 +64,7 @@ class _PostsState extends State<Posts> {
                   showChildOpacityTransition: false,
                   onRefresh: _handel,
                   child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: posts.length,
                       itemBuilder: (context, index) {
                         return DefPosts(posts[index]);
@@ -76,13 +76,18 @@ class _PostsState extends State<Posts> {
 // ignore: constant_identifier_names
 enum _MenuValue { update, delete }
 
-class DefPosts extends StatelessWidget {
+class DefPosts extends StatefulWidget {
   const DefPosts(
     this.post, {
     Key? key,
   }) : super(key: key);
   final Map post;
 
+  @override
+  State<DefPosts> createState() => _DefPostsState();
+}
+
+class _DefPostsState extends State<DefPosts> {
   void cheackOnDeleted(context) {
     final snackbar = SnackBar(
       padding: const EdgeInsets.all(20),
@@ -99,6 +104,8 @@ class DefPosts extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
+  final _commentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -108,11 +115,11 @@ class DefPosts extends StatelessWidget {
           ListTile(
               leading: CircleAvatar(
                   radius: 20,
-                  backgroundImage: ((post['doctor']['image'] != null
-                      ? NetworkImage(post['doctor']['image'])
+                  backgroundImage: ((widget.post['doctor']['image'] != null
+                      ? NetworkImage(widget.post['doctor']['image'])
                       : const AssetImage('assets/p1.png')) as ImageProvider)),
               title: Text(
-                post['doctor']['name'],
+                widget.post['doctor']['name'],
                 style: const TextStyle(color: Colors.black),
               ),
               trailing: PopupMenuButton<_MenuValue>(
@@ -135,138 +142,165 @@ class DefPosts extends StatelessWidget {
                     case _MenuValue.update:
                       await Get.to(
                           () => AddPostScreen(
-                                post['subject']['id'].toString(),
-                                post: post,
+                                widget.post['subject']['id'].toString(),
+                                post: widget.post,
                               ),
                           transition: Transition.leftToRight);
                       break;
                     case _MenuValue.delete:
-                      deafultDialog(context);
-
+                      await Api.deletePost(widget.post['id'].toString(),
+                          showLoading: true);
                       break;
                   }
                 },
               )),
           Container(
-            margin: const EdgeInsets.only(
-                top: defaultPading / 2, bottom: defaultPading),
-            padding: const EdgeInsets.all(defaultPading / 2),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.shade50,
-                border: Border.all(color: Colors.grey.shade300)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  post['body'],
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.grey.shade700,
-                      height: 1.5),
-                ),
-                (post['file'] != null &&
-                        post['file'].toString().contains("https"))
-                    ? Padding(
-                        padding: const EdgeInsets.only(
-                            top: defaultPading, bottom: defaultPading),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(post['file'],
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 200),
-                        ),
-                      )
-                    : const SizedBox(height: 50),
-                Text('0 Comment',
-                    style: TextStyle(color: Colors.grey.shade500)),
-                const Padding(
-                  padding: EdgeInsets.only(
-                      top: defaultPading / 3, bottom: defaultPading / 3),
-                  child: Divider(
-                    thickness: 1,
+              margin: const EdgeInsets.only(
+                  top: defaultPading / 2, bottom: defaultPading),
+              padding: const EdgeInsets.all(defaultPading / 2),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey.shade50,
+                  border: Border.all(color: Colors.grey.shade300)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.post['body'],
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.grey.shade700,
+                        height: 1.5),
                   ),
-                ),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage('assets/p1.png')),
-                    const SizedBox(
-                      width: defaultPading / 2,
-                    ),
-                    Expanded(
-                      child: Container(
-                          padding:
-                              const EdgeInsets.only(left: defaultPading / 2),
-                          height: 45,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                                hintText: 'Add comment',
-                                border: InputBorder.none),
-                          )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+                  (widget.post['file'] != null &&
+                          widget.post['file'].toString().contains("https"))
+                      ? Padding(
+                          padding: const EdgeInsets.only(
+                              top: defaultPading, bottom: defaultPading),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(widget.post['file'],
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 200),
+                          ),
+                        )
+                      : const SizedBox(height: 50),
+                  const Divider(
+                    thickness: 1.2,
+                  ),
+                  FutureBuilder<List>(
+                      future: Api.getComments(widget.post['id'].toString()),
+                      builder: (_, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasData && snapshot.data!.isEmpty) {
+                          return Center(
+                              child: Column(
+                            children: [
+                              Text1(
+                                text: 'No Comments found',
+                                color: Colors.grey.shade600,
+                              ),
+                            ],
+                          ));
+                        }
+
+                        final comments = snapshot.data ?? [];
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...comments
+                                .map((e) => Container(
+                                      margin: const EdgeInsets.only(bottom: 15),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: ListTile(
+                                          contentPadding:
+                                              const EdgeInsets.only(bottom: 8),
+                                          leading: Image.asset('assets/p1.png'),
+                                          title: Text(e['name']),
+                                          subtitle: Text(e['comment']),
+                                          trailing: isDoctor
+                                              ? IconButton(
+                                                  onPressed: () async {
+                                                    await Api.deleteCmment(
+                                                        e['id'].toString(),
+                                                        showLoading: true);
+                                                    setState(() {});
+                                                  },
+                                                  color: Colors.red,
+                                                  icon:
+                                                      const Icon(Icons.delete))
+                                              : null),
+                                    ))
+                                .toList(),
+                            const SizedBox(height: 16),
+                            Text('${comments.length} Comment',
+                                style: TextStyle(color: Colors.grey.shade500)),
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                  top: defaultPading / 3,
+                                  bottom: defaultPading / 3),
+                              child: Divider(
+                                thickness: 1,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                          radius: 20,
+                          backgroundImage: AssetImage('assets/p1.png')),
+                      const SizedBox(
+                        width: defaultPading / 2,
+                      ),
+                      Expanded(
+                        child: Container(
+                            padding:
+                                const EdgeInsets.only(left: defaultPading / 2),
+                            height: 45,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: TextFormField(
+                              controller: _commentController,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                      onPressed: () async {
+                                        if (_commentController.text
+                                            .trim()
+                                            .isNotEmpty) {
+                                          await Api.addComment(
+                                              widget.post['id'].toString(),
+                                              _commentController.text.trim(),
+                                              showLoading: true);
+                                          _commentController.clear();
+                                          setState(() {});
+                                        }
+                                      },
+                                      icon: const Icon(Icons.send)),
+                                  hintText: 'Add comment',
+                                  border: InputBorder.none),
+                            )),
+                      ),
+                    ],
+                  )
+                ],
+              )),
         ],
       ),
-    );
-  }
-
-  Future<dynamic> deafultDialog(
-    BuildContext context,
-  ) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          actions: [
-            TextButton(
-                style: TextButton.styleFrom(backgroundColor: Colors.blue),
-                onPressed: () => Navigator.pop(context, 'Cancel'),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.white),
-                )),
-            TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.redAccent),
-              onPressed: () async {
-                Get.back();
-                await Api.deletePost(post['id'].toString(), showLoading: true);
-              },
-              child: const Text(
-                'Delete Post',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-          backgroundColor: Colors.white,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'Delete Post',
-              ),
-              Icon(
-                Icons.delete_forever_rounded,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-          content: Text(
-              'Are you sure that you would like to Delete Delete Post? You will lose this Delete Post',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-              ))),
     );
   }
 }

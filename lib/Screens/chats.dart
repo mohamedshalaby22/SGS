@@ -40,25 +40,18 @@ class _ThirdScreenState extends State<ThirdScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const CircleAvatar(
                     backgroundImage: AssetImage('assets/p1.png'),
                   ),
-                  const SizedBox(
-                    width: 10,
+                  Text1(
+                    text: 'SG Chat',
+                    color: Colors.green,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text1(
-                        text: 'Dr: Doctor1',
-                        color: Colors.grey.shade500,
-                      ),
-                      Text1(
-                        text: 'Online',
-                        color: Colors.green,
-                      ),
-                    ],
+                  Text1(
+                    text: 'SG Chat',
+                    color: Colors.transparent,
                   ),
                 ],
               ),
