@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/add_subject.dart';
 import 'package:flutter_application_3/Services/api.dart';
@@ -25,6 +27,9 @@ class Data {
   });
 }
 
+const img =
+    'https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80';
+
 class FirstScreen extends StatefulWidget {
   const FirstScreen({Key? key}) : super(key: key);
 
@@ -33,15 +38,37 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  final img =
-      'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80';
   Future<void> handel() async {
     setState(() {});
     await Future.delayed(const Duration(seconds: 2));
   }
 
+  List imgs = [
+    {
+      'image':
+          'https://images.unsplash.com/photo-1606166325683-e6deb697d301?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1485&q=80',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1563372590-aa093423dcbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1622&q=80',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    },
+    {
+      'image':
+          'https://images.unsplash.com/photo-1625014618427-fbc980b974f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
+    // var element = (imgs.toList()..shuffle());
     return Scaffold(
       floatingActionButton: isDoctor
           ? FloatingActionButton(
@@ -195,7 +222,10 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  Future<dynamic> deafultDialog(BuildContext context, id) {
+  Future<dynamic> deafultDialog(
+    BuildContext context,
+    id,
+  ) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(

@@ -1,4 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/bottom_screens/subjects.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
@@ -39,31 +40,17 @@ class Detail1 extends StatelessWidget {
                   decoration: decoration,
                   child: Column(
                     children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/re.png')),
-                      const SizedBox(
-                        height: defaultPading,
+                      Container(
+                        height: 220,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: img,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Icon(
-                      //       Icons.person_outlined,
-                      //       color: primaryColor,
-                      //     ),
-                      //     const SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     Text(
-                      //       "controller",
-                      //       style: TextStyle(
-                      //           color: Colors.grey.shade600,
-                      //           fontSize: 20,
-                      //           fontWeight: FontWeight.bold),
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   )),
               const SizedBox(
@@ -77,14 +64,6 @@ class Detail1 extends StatelessWidget {
                       transition: Transition.leftToRight);
                 },
               ),
-              // DefaultCont(
-              //   iconData: Icons.assignment_outlined,
-              //   text: 'Degrees',
-              //   onPressed: () {
-              //     Get.to(() => DegressPage(data.id),
-              //         transition: Transition.leftToRight);
-              //   },
-              // ),
               DefaultCont(
                 iconData: Icons.menu_book_outlined,
                 text: 'Attachments',

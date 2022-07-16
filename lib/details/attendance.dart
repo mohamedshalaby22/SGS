@@ -1,4 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/Models/attendence.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/constant/const.dart';
@@ -8,6 +11,7 @@ class AttendancePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _random = (attendence.toList()..shuffle());
     return Scaffold(
       appBar: AppBar(
         leading: const LeadingIcon(),
@@ -57,41 +61,64 @@ class AttendancePage extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) => Container(
-                  margin: const EdgeInsets.only(
-                      top: defaultPading, bottom: defaultPading / 2),
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text1(
-                        text: '2022-6-11',
-                        color: Colors.grey.shade500,
-                        size: 18,
-                      ),
-                      Container(
-                        width: 30,
-                        height: 7,
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                      Text1(
-                        text: 'Attendant',
-                        color: Colors.green,
-                        size: 18,
-                      )
-                    ],
-                  ),
+                itemCount: attendence.length,
+                itemBuilder: (context, index) => AttendentWidget(
+                  index: index,
+                  isAttended: _random[index].status,
+                  date: attendence[index].date,
+                  value: _random[index].attendent,
                 ),
               ),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class AttendentWidget extends StatelessWidget {
+  AttendentWidget({
+    Key? key,
+    required this.index,
+    required this.isAttended,
+    required this.date,
+    required this.value,
+  }) : super(key: key);
+  int index;
+  bool isAttended;
+  String date;
+  String value;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin:
+          const EdgeInsets.only(top: defaultPading, bottom: defaultPading / 2),
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text1(
+            text: date,
+            color: Colors.grey.shade500,
+            size: 18,
+          ),
+          Container(
+            width: 30,
+            height: 7,
+            decoration: BoxDecoration(
+                color: isAttended ? Colors.green : Colors.red,
+                borderRadius: BorderRadius.circular(5)),
+          ),
+          Text1(
+            text: value,
+            color: isAttended ? Colors.green : Colors.red,
+            size: 18,
+          )
+        ],
       ),
     );
   }

@@ -117,7 +117,7 @@ class DefPosts extends StatelessWidget {
               ),
               trailing: PopupMenuButton<_MenuValue>(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(5)),
                 icon: const Icon(Icons.more_horiz),
                 itemBuilder: (context) => [
                   const PopupMenuItem(
@@ -141,8 +141,8 @@ class DefPosts extends StatelessWidget {
                           transition: Transition.leftToRight);
                       break;
                     case _MenuValue.delete:
-                      await Api.deletePost(post['id'].toString(),
-                          showLoading: true);
+                      deafultDialog(context);
+
                       break;
                   }
                 },
@@ -219,6 +219,54 @@ class DefPosts extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<dynamic> deafultDialog(
+    BuildContext context,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          actions: [
+            TextButton(
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.white),
+                )),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.redAccent),
+              onPressed: () async {
+                Get.back();
+                await Api.deletePost(post['id'].toString(), showLoading: true);
+              },
+              child: const Text(
+                'Delete Post',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+          backgroundColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                'Delete Post',
+              ),
+              Icon(
+                Icons.delete_forever_rounded,
+                color: Colors.grey,
+              ),
+            ],
+          ),
+          content: Text(
+              'Are you sure that you would like to Delete Delete Post? You will lose this Delete Post',
+              style: TextStyle(
+                color: Colors.grey.shade600,
+              ))),
     );
   }
 }

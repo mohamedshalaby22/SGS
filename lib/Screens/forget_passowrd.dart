@@ -66,7 +66,7 @@ class ForgetPassword extends StatelessWidget {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter the email';
+                            return 'Please enter the new password';
                           }
                           return null;
                         },
@@ -89,20 +89,11 @@ class ForgetPassword extends StatelessWidget {
                             if (formKey.currentState!.validate()) {
                               await Api.changeStudentPassword(newPassword.text,
                                   showLoading: true);
-                              // controller.isLoading.value
-                              //     ? null
-                              //     : controller.loadCircleProgress();
-                              // controller.ForgetPassword(
-                              //     resetEmail.text, context);
                             }
                           }),
                       const SizedBox(
                         height: defaultPading,
                       ),
-                      Align(
-                          child: controller.isLoading.value
-                              ? const CircularProgressIndicator()
-                              : null),
                     ],
                   ),
                 )
