@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_unnecessary_containers, must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Models/chat_model.dart';
@@ -48,6 +47,7 @@ class _ThirdScreenState extends State<ThirdScreen> {
                   Text1(
                     text: 'SG Chat',
                     color: Colors.green,
+                    size: 17,
                   ),
                   Text1(
                     text: 'SG Chat',
@@ -95,11 +95,11 @@ class _ThirdScreenState extends State<ThirdScreen> {
                                       Chat.fromJson(chatList[index]);
 
                                   return ChatsMessage(
-                                    isSended: Chat.isMyMessage(
-                                        currentMsg.user!, localUser!.email!),
-                                    text: currentMsg.msg!,
-                                    time: currentMsg.time!,
-                                  );
+                                      isSended: Chat.isMyMessage(
+                                          currentMsg.user!, localUser!.email!),
+                                      text: currentMsg.msg!,
+                                      time: currentMsg.time!,
+                                      userName: currentMsg.name!);
                                 }));
                       }
                     }

@@ -1,15 +1,11 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/Screens/add_subject.dart';
 import 'package:flutter_application_3/Services/api.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/detail1.dart';
-import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -70,28 +66,25 @@ class _FirstScreenState extends State<FirstScreen> {
   Widget build(BuildContext context) {
     // var element = (imgs.toList()..shuffle());
     return Scaffold(
-      floatingActionButton: isDoctor
-          ? FloatingActionButton(
-              onPressed: () {
-                Get.to(() => AddSubject(), transition: Transition.zoom)!
-                    .then((value) => setState(() {}));
-              },
-              child: const Icon(Icons.add),
-            )
-          : null,
+      // floatingActionButton: isDoctor
+      //     ? FloatingActionButton(
+      //         onPressed: () {
+      //           Get.to(() => AddSubject(), transition: Transition.zoom)!
+      //               .then((value) => setState(() {}));
+      //         },
+      //         child: const Icon(Icons.add),
+      //       )
+      //     : null,
       appBar: AppBar(
         title: Text(
           'SG System',
           style: TextStyle(
               color: primaryColor, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: defaultPading / 2),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/sp.jpeg'),
-            ),
-          )
+              padding: const EdgeInsets.only(right: defaultPading / 2),
+              child: Image.asset('assets/icon1.png'))
         ],
       ),
       body: Padding(

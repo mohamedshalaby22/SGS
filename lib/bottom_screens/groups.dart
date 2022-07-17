@@ -58,7 +58,7 @@ class _GroupsState extends State<Groups> {
                           leading: const CircleAvatar(
                             backgroundImage: AssetImage('assets/p1.png'),
                           ),
-                          title: const Text('It Group'),
+                          title: const Text('SG Chat'),
                           trailing: CircleAvatar(
                               backgroundColor: Colors.green.shade500,
                               child: Text1(

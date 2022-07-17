@@ -10,7 +10,7 @@ class Chat {
       {required this.user,
       required this.msg,
       required this.time,
-      required name});
+      required this.name});
 
   Chat.fromJson(QueryDocumentSnapshot<Object?> json) {
     user = json['user'];

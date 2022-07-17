@@ -10,10 +10,12 @@ class ChatsMessage extends StatelessWidget {
     required this.time,
     required this.isSended,
     required this.text,
+    required this.userName,
   }) : super(key: key);
   bool isSended;
   String text;
   String time;
+  String userName;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,6 +24,17 @@ class ChatsMessage extends StatelessWidget {
         crossAxisAlignment:
             isSended ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(
+              userName,
+              style: const TextStyle(
+                  color: Colors.green, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
           Container(
             constraints: const BoxConstraints(
               maxWidth: 250,
@@ -49,9 +62,15 @@ class ChatsMessage extends StatelessWidget {
                         topLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
                         bottomLeft: Radius.circular(15))),
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.white),
+            child: Column(
+              crossAxisAlignment:
+                  isSended ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                Text(
+                  text,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
             ),
           ),
           const SizedBox(

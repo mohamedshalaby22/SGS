@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         height: value,
                         clipBehavior: Clip.hardEdge,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: Image.asset('assets/sp.jpeg'));
+                        child: Image.asset('assets/icon1.png'));
                   })),
         ],
       ),

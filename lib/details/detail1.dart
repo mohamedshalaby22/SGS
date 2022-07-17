@@ -7,6 +7,7 @@ import 'package:flutter_application_3/components/text2.dart';
 import 'package:flutter_application_3/constant/const.dart';
 import 'package:flutter_application_3/details/attachments.dart';
 import 'package:flutter_application_3/details/posts.dart';
+import 'package:flutter_application_3/main.dart';
 import 'package:get/get.dart';
 
 class Detail1 extends StatelessWidget {
@@ -24,56 +25,58 @@ class Detail1 extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: defaultPading),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text2(
-                text: data.subjects,
-              ),
-              const SizedBox(
-                height: defaultPading,
-              ),
-              Container(
-                  width: width,
-                  padding: const EdgeInsets.all(defaultPading),
-                  decoration: decoration,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 220,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: CachedNetworkImage(
-                          imageUrl: img,
-                          fit: BoxFit.cover,
-                        ),
+          child: Column(children: [
+            Text2(
+              text: data.subjects,
+            ),
+            const SizedBox(
+              height: defaultPading,
+            ),
+            Container(
+                width: width,
+                padding: const EdgeInsets.all(defaultPading),
+                decoration: decoration,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 220,
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  )),
-              const SizedBox(
-                height: defaultPading * 3,
-              ),
-              DefaultCont(
-                iconData: Icons.post_add_outlined,
-                text: 'Posts',
-                onPressed: () {
-                  Get.to(() => Posts(data.id.toString()),
-                      transition: Transition.leftToRight);
-                },
-              ),
-              DefaultCont(
-                iconData: Icons.menu_book_outlined,
-                text: 'Attachments',
-                onPressed: () {
-                  Get.to(() => Attachments(data.id),
-                      transition: Transition.leftToRight);
-                },
-              ),
-            ],
-          ),
+                      child: CachedNetworkImage(
+                        imageUrl: img,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                )),
+            const SizedBox(
+              height: defaultPading * 3,
+            ),
+            Column(
+              children: [
+                DefaultCont(
+                  iconData: Icons.post_add_outlined,
+                  text: 'Posts',
+                  onPressed: () {
+                    Get.to(() => Posts(data.id.toString()),
+                        transition: Transition.leftToRight);
+                  },
+                ),
+                isDoctor
+                    ? Container()
+                    : DefaultCont(
+                        iconData: Icons.menu_book_outlined,
+                        text: 'Attachments',
+                        onPressed: () {
+                          Get.to(() => Attachments(data.id),
+                              transition: Transition.leftToRight);
+                        },
+                      ),
+              ],
+            )
+          ]),
         ),
       ),
     );

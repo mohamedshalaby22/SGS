@@ -6,8 +6,6 @@ import 'package:flutter_application_3/components/default_button.dart';
 import 'package:flutter_application_3/components/leading_icon.dart';
 import 'package:flutter_application_3/components/text1.dart';
 import 'package:flutter_application_3/constant/const.dart';
-import 'package:flutter_application_3/controller/auth.dart';
-import 'package:get/get.dart';
 
 import '../components/formfield.dart';
 
@@ -19,7 +17,6 @@ class ForgetPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    AuthController controller = AuthController();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -40,7 +37,7 @@ class ForgetPassword extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Text1(
-                    text: 'Enter Your Email Address To Reset Your Password',
+                    text: 'Enter the new password To Reset Your old Password',
                     size: 18,
                     color: Colors.grey.shade500,
                   ),
@@ -55,7 +52,7 @@ class ForgetPassword extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text1(text: 'Enter Your Email'),
+                    Text1(text: 'Enter the new password'),
                     const SizedBox(
                       height: 7,
                     ),
@@ -80,23 +77,21 @@ class ForgetPassword extends StatelessWidget {
                 const SizedBox(
                   height: defaultPading,
                 ),
-                Obx(
-                  () => Column(
-                    children: [
-                      DefaultButton(
-                          text: 'SEND',
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              await Api.changeStudentPassword(newPassword.text,
-                                  showLoading: true);
-                            }
-                          }),
-                      const SizedBox(
-                        height: defaultPading,
-                      ),
-                    ],
-                  ),
-                )
+                Column(
+                  children: [
+                    DefaultButton(
+                        text: 'SEND',
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            await Api.changeStudentPassword(newPassword.text,
+                                showLoading: true);
+                          }
+                        }),
+                    const SizedBox(
+                      height: defaultPading,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

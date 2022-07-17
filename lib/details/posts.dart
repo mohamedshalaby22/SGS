@@ -122,38 +122,40 @@ class _DefPostsState extends State<DefPosts> {
                 widget.post['doctor']['name'],
                 style: const TextStyle(color: Colors.black),
               ),
-              trailing: PopupMenuButton<_MenuValue>(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                icon: const Icon(Icons.more_horiz),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Update'),
-                    value: _MenuValue.update,
-                  ),
-                  const PopupMenuDivider(height: 3),
-                  const PopupMenuItem(
-                    child: Text('Delete'),
-                    value: _MenuValue.delete,
-                  ),
-                ],
-                onSelected: (value) async {
-                  switch (value) {
-                    case _MenuValue.update:
-                      await Get.to(
-                          () => AddPostScreen(
-                                widget.post['subject']['id'].toString(),
-                                post: widget.post,
-                              ),
-                          transition: Transition.leftToRight);
-                      break;
-                    case _MenuValue.delete:
-                      await Api.deletePost(widget.post['id'].toString(),
-                          showLoading: true);
-                      break;
-                  }
-                },
-              )),
+              trailing: isDoctor
+                  ? PopupMenuButton<_MenuValue>(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      icon: const Icon(Icons.more_horiz),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          child: Text('Update'),
+                          value: _MenuValue.update,
+                        ),
+                        const PopupMenuDivider(height: 3),
+                        const PopupMenuItem(
+                          child: Text('Delete'),
+                          value: _MenuValue.delete,
+                        ),
+                      ],
+                      onSelected: (value) async {
+                        switch (value) {
+                          case _MenuValue.update:
+                            await Get.to(
+                                () => AddPostScreen(
+                                      widget.post['subject']['id'].toString(),
+                                      post: widget.post,
+                                    ),
+                                transition: Transition.leftToRight);
+                            break;
+                          case _MenuValue.delete:
+                            await Api.deletePost(widget.post['id'].toString(),
+                                showLoading: true);
+                            break;
+                        }
+                      },
+                    )
+                  : null),
           Container(
               margin: const EdgeInsets.only(
                   top: defaultPading / 2, bottom: defaultPading),
